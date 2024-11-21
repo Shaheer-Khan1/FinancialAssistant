@@ -1,0 +1,40 @@
+/* Center the form on the screen */
+.app-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f4f8;
+    
+  }
+  
+  .form-container {
+    text-align: center;
+    width: 100%;
+    max-width: 450px;
+  }
+  
+  /* Toggle button for switching between forms */
+  .toggle-button {
+    margin-top: 20px;
+  }
+  
+  .toggle-button button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  .toggle-button button:hover {
+    background-color: #0056b3;
+  }
+  .form-container {
+  text-align: center;
+  width: 100%;
+  max-width: 450px;
+}
+
