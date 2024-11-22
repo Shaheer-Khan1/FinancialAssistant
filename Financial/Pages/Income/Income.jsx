@@ -9,6 +9,34 @@ export default function Income() {
   const [incomes, setIncomes] = useState([]);
   const navigate = useNavigate();
 
+  // Fetch incomes from the backend when the component mounts
+  useEffect(() => {
+    const fetchIncomes = async () => {
+      try {
+        const userData = JSON.parse(localStorage.getItem('userData'));
+        if (!userData) {
+          navigate('/login');
+          return;
+        }
+
+        console.log('Fetching incomes for:', userData.email);
+
+        // Fetch incomes for the logged-in user
+        const response = await axios.get('http://localhost:5000/api/auth/incomes', {
+          params: { email: userData.email },
+        });
+
+        // Update state with fetched incomes
+        setIncomes(response.data.incomes || []);
+      } catch (error) {
+        console.error('Error fetching incomes:', error);
+        alert('Failed to load incomes. Please try again later.');
+      }
+    };
+
+    fetchIncomes();
+  }, [navigate]);
+
   const handleAddIncome = async () => {
     try {
       const userData = JSON.parse(localStorage.getItem('userData'));
@@ -16,24 +44,23 @@ export default function Income() {
         navigate('/login');
         return;
       }
-  
+
       // Prepare the data to send
       const newIncome = { amount, source };
-  
-      // Log the data to be sent to the backend, including the email
+
       console.log('Sending data to backend:', {
         email: userData.email,
-        ...newIncome
+        ...newIncome,
       });
-  
+
       // Send the data to the backend
       const response = await axios.post('http://localhost:5000/api/auth/incomes', {
         email: userData.email,
         ...newIncome,
       });
-  
+
       // Update state with the new income
-      setIncomes(prevIncomes => [...prevIncomes, response.data.income]);
+      setIncomes((prevIncomes) => [...prevIncomes, response.data.income]);
       setAmount('');
       setSource('');
     } catch (error) {
@@ -79,7 +106,6 @@ export default function Income() {
         ))}
       </ul>
 
-      {/* Display total income at the end */}
       <h3>Total Income: ${totalIncome.toFixed(2)}</h3>
     </div>
   );

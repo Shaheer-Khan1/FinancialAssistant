@@ -9,13 +9,18 @@ const userSchema = new mongoose.Schema({
   savings: { type: Number, default: 0 },  // User savings
   expenses: { type: [Object], default: [] },  // List of expenses (could include date, amount, description)
   budget: { type: Number, default: 0 },  // User's set budget
-  crypto_balance: { type: Number, default: 0 },  // Crypto balance for crypto dashboard
+  cryptoBalance: [
+    {
+      coinName: { type: String, required: true }, // Coin name (e.g., Bitcoin, Ethereum)
+      amount: { type: Number, default: 0 }, // Amount of the coin
+    },
+  ],
   debts: { type: [Object], default: [] },  // List of debts (could include amount, creditor, due date)
   subscriptions: { type: [Object], default: [] },  // List of subscriptions (could include name, amount, frequency)
   
   income: [{
-    amount: { type: Number, required: true },  // Income amount
-    source: { type: String, required: true },  // Source of income (e.g., job, investment, etc.)
+    amount: { type: Number  },  // Income amount
+    source: { type: String},  // Source of income (e.g., job, investment, etc.)
     date: { type: Date, default: Date.now },  // Date when the income was received
   }],
   

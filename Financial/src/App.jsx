@@ -4,6 +4,8 @@ import LoginRegister from '../Pages/LoginRegister/LoginRegister'; // Correct imp
 import Dashboard from '../Pages/Dashboard/Dashboard';
 import Income from '../Pages/Income/Income';
 import './App.css'; // Import custom CSS
+import CryptoDashboard from '../Pages/CryptoDashboard/CryptoDashboard';
+import ZakatCalculator from '../Pages/ZakatCalc/ZakatCalculator';
 
 const App = () => {
   return (
@@ -12,6 +14,8 @@ const App = () => {
           <Route path="/" element={<LoginRegister />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/income" element={<Income />} />
+          <Route path="/crypto" element={<CryptoDashboard />} />
+          <Route path="/zakat" element={<ZakatCalculator />} />
     </Routes>  
     </div>
   );

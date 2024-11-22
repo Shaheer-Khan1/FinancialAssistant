@@ -20,14 +20,13 @@ const AuthForm = ({ isSignup, onSubmit }) => {
 
   const navigate = useNavigate(); 
 
-  // Check if there's any stored user data in localStorage
-  const storedUserData = JSON.parse(localStorage.getItem('userData'));
-
   useEffect(() => {
-    if (storedUserData) {
-      setFormData(storedUserData); // Populate form with stored data
+    // Clear user data when entering the signup form
+    if (isSignup) {
+      localStorage.removeItem('userData'); 
+      setFormData({ name: '', email: '', password: '' });
     }
-  }, []);
+  }, [isSignup]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -42,42 +41,32 @@ const AuthForm = ({ isSignup, onSubmit }) => {
     setLoading(true);  
     setError('');      
     setSuccessMessage(''); 
-
+    
     try {
       const apiUrl = isSignup ? '/api/auth/register' : '/api/auth/login';
       const response = await api.post(apiUrl, formData);
-
-      onSubmit(response.data);
-
-      if (response.data.token) {
-        localStorage.setItem('token', response.data.token); 
-        localStorage.setItem('userData', JSON.stringify(formData)); // Store user data
-
-        if (isSignup) {
-          setSuccessMessage('Registration successful!');
-        } else {
-          setSuccessMessage('Login successful!');
-          navigate('/dashboard');
-        }
-      }
-    } catch (err) {
+    
       if (isSignup) {
-        if (err.response && err.response.data && err.response.data.message === 'Email already exists') {
-          setError('Email is already taken.');
-        } else {
-          setError('Registration error.');
-        }
-      } else {
-        if (err.response && err.response.data && err.response.data.message === 'Invalid credentials') {
-          setError('Invalid credentials.');
-        } else {
-          setError('Login error.');
-        }
+        setSuccessMessage('Registration successful!');
+      } else if (response.data.token) {
+        // Only store userData during login
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('userData', JSON.stringify({ email: formData.email })); // Store only email or necessary data
+        setSuccessMessage('Login successful!');
+        navigate('/dashboard');
       }
+    
+      onSubmit(response.data);
+    } catch (err) {
+      const errorMessage = err.response?.data?.message || 'An error occurred';
+      setError(isSignup ? 'Registration error.' : errorMessage);
     } finally {
       setLoading(false); 
     }
   };
+  
+    
+  
 
   return (
     <>

@@ -108,5 +108,73 @@ router.get('/getUserData', async (req, res) => {
     }
   });
   
+  router.post('/crypto', async (req, res) => {
+    const { email, coinName, amount } = req.body;  // Expecting email from the frontend
+    
+    // Validate input
+    if (!email || !coinName || !amount) {
+      return res.status(400).json({ error: 'Email, coin name, and amount are required' });
+    }
+    console.log(req.body);
+  
+    try {
+      // Find the user by email
+      const user = await User.findOne({ email });
+  
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      // Check if the coin already exists in the user's cryptoBalance
+      const existingCoinIndex = user.cryptoBalance.findIndex(
+        (crypto) => crypto.coinName === coinName
+      );
+  
+      if (existingCoinIndex > -1) {
+        // Coin already exists, so we update the amount
+        user.cryptoBalance[existingCoinIndex].amount += amount;
+      } else {
+        // Coin does not exist, add a new entry for the coin
+        user.cryptoBalance.push({ coinName, amount });
+      }
+  
+      // Save the updated user document
+      await user.save();
+  
+      res.status(200).json({ message: 'Crypto data saved successfully' });
+    } catch (error) {
+      console.error('Error saving crypto data:', error);
+      res.status(500).json({ error: 'Failed to save crypto data' });
+    }
+  });
+
+  router.post('/crypto/holdings', async (req, res) => {
+    const { email } = req.body; // Get the email from the request body
+    
+    if (!email) {
+      return res.status(400).json({ message: 'Email is required' });
+    }
+  
+    try {
+      // Fetch the user document by email
+      const user = await User.findOne({ email });
+  
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+  
+      // Access the cryptoBalance field of the user
+      const holdings = user.cryptoBalance;
+  
+      // Return the user's crypto holdings
+      res.json({ holdings });
+    } catch (error) {
+      console.error('Error fetching holdings:', error);
+      res.status(500).json({ message: 'Error fetching holdings' });
+    }
+  });
+
+  
+  
 
 export default router;

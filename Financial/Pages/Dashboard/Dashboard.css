@@ -1,0 +1,244 @@
+/* Dashboard.css */
+
+/* Dashboard Container */
+.dashboard-container {
+    background-color: #f4f7fb; /* Soft background color */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Heading styles */
+  .dashboard-container h1 {
+    font-size: 2.5rem;
+    color: #3b3b3b;
+    margin-bottom: 20px;
+  }
+  
+  .dashboard-container h2 {
+    font-size: 1.8rem;
+    color: #333;
+    margin-bottom: 15px;
+  }
+  
+  .dashboard-container p {
+    font-size: 1.2rem;
+    color: #555;
+  }
+  
+  /* Error message style */
+  .error-message {
+    color: red;
+    font-size: 1.5rem;
+    text-align: center;
+    padding: 20px;
+    border: 2px solid red;
+    background-color: #ffcccc;
+    border-radius: 8px;
+  }
+  
+  /* Overview Section */
+  .overview {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .overview p {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #4caf50;
+  }
+  
+  /* Income Section */
+  .income-section {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .income-section h2 {
+    color: #333;
+  }
+  
+  .income-section p {
+    color: #555;
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+  }
+  
+  /* Expenses Section */
+  .expenses-section {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .expenses-section h2 {
+    color: #333;
+  }
+  
+  .expenses-section p {
+    color: #555;
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+  }
+  
+  /* Budget Section */
+  .budget-section {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .budget-section h2 {
+    color: #333;
+  }
+  
+  .budget-section p {
+    color: #555;
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+  }
+  
+  /* Savings Section */
+  .savings-section {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .savings-section h2 {
+    color: #333;
+  }
+  
+  .savings-section p {
+    color: #555;
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+  }
+  
+  /* Crypto Section */
+  .crypto-section {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .crypto-section h2 {
+    color: #333;
+  }
+  
+  .crypto-section p {
+    color: #555;
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+  }
+  
+  /* Zakat Section */
+  .zakat-section {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .zakat-section h2 {
+    color: #333;
+  }
+  
+  .zakat-section p {
+    color: #555;
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+  }
+  
+  /* Debts Section */
+  .debts-section {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .debts-section h2 {
+    color: #333;
+  }
+  
+  .debts-section p {
+    color: #555;
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+  }
+  
+  /* Subscriptions Section */
+  .subscriptions-section {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .subscriptions-section h2 {
+    color: #333;
+  }
+  
+  .subscriptions-section p {
+    color: #555;
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+  }
+  
+  /* Motivational Tips Section */
+  .motivational-tips {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .motivational-tips p {
+    font-style: italic;
+    color: #6c757d;
+  }
+  
+  /* Button Styles for each Section */
+  .income-section .button,
+  .expenses-section .button,
+  .budget-section .button,
+  .savings-section .button,
+  .crypto-section .button,
+  .zakat-section .button,
+  .debts-section .button,
+  .subscriptions-section .button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    color: white;
+    background-color: #4caf50;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .income-section .button:hover,
+  .expenses-section .button:hover,
+  .budget-section .button:hover,
+  .savings-section .button:hover,
+  .crypto-section .button:hover,
+  .zakat-section .button:hover,
+  .debts-section .button:hover,
+  .subscriptions-section .button:hover {
+    background-color: #45a049;
+  }
+  
