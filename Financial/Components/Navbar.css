@@ -1,0 +1,101 @@
+/* ScrollWheelNavbar.css */
+.scroll-wheel-navbar {
+  position: fixed;
+  top: 20px; /* Positioning the circle at the top */
+  left: 0px; /* Position the circle to the left */
+  width: 20px; /* Small dot size initially */
+  height: 20px;
+  border-radius: 50%; /* Circular shape */
+  background-color: #4e5d6d; /* Dark color for the circle */
+  box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.3);
+  transition: width 0.3s ease, left 0.3s ease; /* Transition for expanding and moving */
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer; /* Make it clickable */
+}
+
+.scroll-wheel-navbar:hover {
+  width: 50vw; /* Expand to show the full sidebar horizontally */
+  left: 20px; /* Align to the left edge */
+}
+
+.nav-list {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  transition: opacity 0.3s ease;
+  opacity: 0; /* Initially hidden */
+  
+}
+
+.scroll-wheel-navbar:hover .nav-list {
+  opacity: 1; /* Reveal the menu when hovered */
+}
+
+.nav-button {
+  background-color: transparent;
+  color: white;
+  border: none;
+  font-size: 1.5rem;
+  text-align: center;
+  padding: 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0; /* Initially hidden */
+  transition: opacity 0.3s ease, padding-left 0.3s ease;
+}
+
+.nav-button span {
+  margin-left: 10px;
+  font-size: 1.1rem;
+  opacity: 0; /* Initially hidden */
+  transition: opacity 0.3s ease, margin-left 0.3s ease;
+}
+
+.scroll-wheel-navbar:hover .nav-button {
+  opacity: 1; /* Make buttons visible when hovered */
+  padding-left: 15px; /* Elegant slide-in effect */
+}
+
+.scroll-wheel-navbar:hover .nav-button span {
+  opacity: 1; /* Show text when hovered */
+  margin-left: 15px; /* Smoothly slide in the text */
+}
+
+.nav-button:hover {
+  background-color: #1abc9c; /* Elegant hover color */
+}
+
+.nav-button:focus {
+  outline: none; /* Remove outline on focus */
+}
+
+/* Customize icons */
+.nav-button .fa-icon {
+  font-size: 1.5rem;
+}
+
+/* Add smooth transition for circle expanding */
+.scroll-wheel-navbar {
+  transition: width 0.5s ease, left 0.5s ease;
+}
+
+/* Mobile view adjustments */
+@media (max-width: 768px) {
+  .scroll-wheel-navbar {
+    top: 10px;
+    left: 10px;
+    width: 40px;
+    height: 40px;
+  }
+
+  .scroll-wheel-navbar:hover {
+    width: 250px; /* Adjust size for smaller screens */
+  }
+}

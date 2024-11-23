@@ -8,10 +8,12 @@ import CryptoDashboard from '../Pages/CryptoDashboard/CryptoDashboard';
 import ZakatCalculator from '../Pages/ZakatCalc/ZakatCalculator';
 import Expense from '../Pages/Expenses/Expenses';
 import Budget from '../Pages/Budget/Budget';
+import ScrollWheelNavbar from '../Components/Navbar';
 
 const App = () => {
   return (
     <div>
+      <ScrollWheelNavbar/>
     <Routes> 
           <Route path="/" element={<LoginRegister />} />
           <Route path="/dashboard" element={<Dashboard />} />

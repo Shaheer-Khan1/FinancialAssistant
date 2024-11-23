@@ -95,6 +95,19 @@ export default function Crypto() {
       new ChartJS(ctx, {
         type: 'pie',
         data: chartData,
+        options: {
+          responsive: false,
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                font: {
+                  size: 10,
+                },
+              },
+            },
+          },
+        },
       });
     }
   }, [userHoldings, coinPrices]);
@@ -128,9 +141,9 @@ export default function Crypto() {
       </div>
 
       {/* Render Pie Chart */}
-      <div>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '20px' }}>
         <h3>Your Portfolio Breakdown</h3>
-        <canvas ref={chartRef} id="chart-container" width="400" height="400"></canvas>
+        <canvas ref={chartRef} id="chart-container" width="200" height="200"></canvas>
       </div>
     </div>
   );
