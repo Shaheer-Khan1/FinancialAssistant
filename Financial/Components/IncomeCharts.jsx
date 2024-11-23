@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import axios from 'axios';
-import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import './IncomeCharts.css';
 
 // Register Chart.js components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
@@ -46,9 +46,9 @@ const IncomeCharts = () => {
                 {
                   label: 'Income ($)',
                   data: incomeAmounts,
-                  backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                  borderColor: 'rgba(75, 192, 192, 1)',
-                  borderWidth: 1,
+                  backgroundColor: 'rgba(255, 0, 0, 0.2)',  // Red bar color
+                  borderColor: 'rgba(255, 0, 0, 1)',  // Red border for bars
+                  borderWidth: 2,  // Bold border
                 },
               ],
             };
@@ -64,6 +64,45 @@ const IncomeCharts = () => {
                   scales: {
                     y: {
                       beginAtZero: true,
+                      ticks: {
+                        font: {
+                          weight: 'bold', // Make Y-axis labels bold
+                          size: 12, // Adjust font size
+                          color: 'white', // Make Y-axis labels white
+                        },
+                      },
+                      grid: {
+                        color: 'white', // Set grid lines to white
+                        lineWidth: 1, // Set grid line thickness
+                      },
+                    },
+                    x: {
+                      ticks: {
+                        font: {
+                          weight: 'bold', // Make X-axis labels bold
+                          size: 12, // Adjust font size
+                          color: 'white', // Make X-axis labels white
+                        },
+                      },
+                      grid: {
+                        color: 'white', // Set grid lines to white
+                        lineWidth: 1, // Set grid line thickness
+                      },
+                    },
+                  },
+                  plugins: {
+                    legend: {
+                      labels: {
+                        font: {
+                          weight: 'bold', // Make legend text bold
+                          color: 'white', // Make legend labels white
+                        },
+                      },
+                    },
+                  },
+                  elements: {
+                    bar: {
+                      borderWidth: 2,
                     },
                   },
                 },
@@ -79,7 +118,7 @@ const IncomeCharts = () => {
 
   return (
     <div className="income-charts-container">
-      <h1>Income Data (Last 6 Months)</h1>
+      <h3 style={{ color: 'white' }}>Income Data (Last 6 Months)</h3>
       <div>
         {/* Chart will be rendered directly into this container */}
         <canvas ref={chartContainerRef}></canvas>

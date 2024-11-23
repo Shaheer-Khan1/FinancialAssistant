@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import './Dashboard.css'; // Add custom styles here
 import IncomeCharts from '../../Components/IncomeCharts';
 import Crypto from '../../Components/Crypto';
+import ExpenseChart from '../../Components/ExpenseChart';
+import HighestBudget from '../../Components/HighestBudget';
 
 export default function Dashboard() {
   const [userData, setUserData] = useState(null); // Store user data
@@ -30,10 +32,16 @@ export default function Dashboard() {
 
   return (
     <div className="dashboard-container">
-      <h1>Hello, {userData.email}</h1> {/* Display user name */}
+      <h1>Your Financial Assistant</h1> {/* Display user name */}
       <section className="overview">
+      <h2>Hello, {userData.email}</h2> {/* Display user name */}
         <h2>Your Savings</h2>
-        <p>You have ${userData.savings} in savings.</p> {/* Display user savings */}
+        <p>
+    Congratulations! You currently have <strong>${userData.savings}</strong> in savings. This is a great step toward achieving your financial goals. 
+    Whether you're saving for a rainy day, a big purchase, or long-term security, your progress shows that you're making smart financial decisions. 
+    Keep up the excellent work, and continue building towards a secure and prosperous future. 
+    Remember, every dollar saved brings you closer to your dreams.
+  </p>
       </section>
 
       {/* Income Section */}
@@ -47,6 +55,7 @@ export default function Dashboard() {
       {/* Expenses Section */}
       <section className="expenses-section">
         <h2>Expenses</h2>
+        <ExpenseChart/>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet, nulla et dictum interdum, nisi lorem egestas odio, vitae scelerisque enim ligula venenatis dolor.</p>
         <button onClick={() => navigate('/expenses')}>Enter Expenses</button>
       </section>
@@ -54,6 +63,7 @@ export default function Dashboard() {
       {/* Budget Section */}
       <section className="budget-section">
         <h2>Budget</h2>
+        <HighestBudget/>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet, nulla et dictum interdum, nisi lorem egestas odio, vitae scelerisque enim ligula venenatis dolor.</p>
         <button onClick={() => navigate('/budget')}>Set Budget</button>
       </section>

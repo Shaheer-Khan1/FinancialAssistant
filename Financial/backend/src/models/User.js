@@ -8,7 +8,11 @@ const userSchema = new mongoose.Schema({
   // New fields
   savings: { type: Number, default: 0 },  // User savings
   expenses: { type: [Object], default: [] },  // List of expenses (could include date, amount, description)
-  budget: { type: Number, default: 0 },  // User's set budget
+  budget: {
+    amount: { type: Number, default: 0 },  // Amount of the budget
+    duration: { type: String, default: '1 month' },  // Duration of the budget (e.g., '1 month', '1 year')
+  },
+  budgetDate: Date, // Add this field to track the date when the budget was added
   cryptoBalance: [
     {
       coinName: { type: String, required: true }, // Coin name (e.g., Bitcoin, Ethereum)

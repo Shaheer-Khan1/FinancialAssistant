@@ -174,6 +174,155 @@ router.get('/getUserData', async (req, res) => {
     }
   });
 
+  router.post('/expenses', async (req, res) => {
+    const { email, date, amount, description } = req.body;
+  
+    if (!email || !date || !amount || !description) {
+      return res.status(400).json({ message: 'Email, date, amount, and description are required.' });
+    }
+  
+    try {
+      const user = await User.findOne({ email });
+      if (!user) {
+        return res.status(404).json({ message: 'User not found.' });
+      }
+  
+      user.expenses.push({ date, amount, description });
+      await user.save();
+  
+      res.status(201).json({ message: 'Expense added successfully.', expenses: user.expenses });
+    } catch (err) {
+      res.status(500).json({ message: 'Server error.', error: err.message });
+    }
+  });
+  router.get('/expenses', async (req, res) => {
+    const { email } = req.query; // Get email from query parameters
+  
+    if (!email) {
+      return res.status(400).json({ message: 'Email is required.' });
+    }
+  
+    try {
+      const user = await User.findOne({ email });
+      if (!user) {
+        return res.status(404).json({ message: 'User not found.' });
+      }
+  
+      res.status(200).json({ expenses: user.expenses });
+    } catch (err) {
+      res.status(500).json({ message: 'Server error.', error: err.message });
+    }
+  });
+  
+  router.post('/budget', async (req, res) => {
+    const { email, budget } = req.body;
+  
+    try {
+      // Find the user by email
+      const user = await User.findOne({ email });
+  
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+  
+      // Update the user's budget and budgetDate
+      user.budget.amount = budget.amount;
+      user.budget.duration = budget.duration;
+      user.budgetDate = budget.date; // Save the date when the budget was set
+  
+      // Save the user with the updated budget and budgetDate
+      await user.save();
+      res.status(200).json({ message: 'Budget saved successfully', user });
+    } catch (error) {
+      console.error('Error saving budget:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  });
+  
+
+  router.get('/highest-budget', async (req, res) => {
+    try {
+      // Aggregation pipeline to group by duration and get the highest budget
+      const result = await User.aggregate([
+        {
+          $group: {
+            _id: "$budget.duration",  // Group by duration
+            highestBudget: { $max: "$budget.amount" }  // Get the highest budget for each duration
+          }
+        },
+        {
+          $project: {
+            _id: 0,  // Hide the internal '_id' field
+            duration: "$_id",  // Rename '_id' to 'duration'
+            highestBudget: 1  // Include the highest budget field
+          }
+        }
+      ]);
+  
+      // Send the result back as a response
+      res.status(200).json(result);
+    } catch (error) {
+      console.error('Error fetching highest budget:', error);
+      res.status(500).json({ message: 'Server error' });
+    }
+  });
+
+  // Backend route to delete the budget
+  router.delete('/budget', async (req, res) => {
+  const { email } = req.body;
+  console.log(req.body);
+  try {
+    // Assuming you have a Budget model to interact with your database
+    await Budget.deleteOne({ email }); // Delete the user's existing budget
+    res.status(200).send({ message: 'Previous budget deleted successfully' });
+  } catch (error) {
+    res.status(500).send({ message: 'Error deleting budget' });
+  }
+  });
+
+  router.get('/budget-remaining', async (req, res) => {
+    const { email } = req.query;
+  
+    if (!email) {
+      return res.status(400).json({ message: 'Email is required.' });
+    }
+  
+    try {
+      const user = await User.findOne({ email });
+      if (!user) {
+        return res.status(404).json({ message: 'User not found.' });
+      }
+  
+      // Get the date when the budget was added
+      const budgetDate = user.budgetDate;
+  
+      if (!budgetDate) {
+        return res.status(400).json({ message: 'Budget date not found for the user.' });
+      }
+  
+      // Calculate the total expenses since the budget date
+      const totalExpenses = user.expenses.reduce((total, expense) => {
+        if (new Date(expense.date) >= new Date(budgetDate)) {
+          return total + expense.amount;  // Only sum the expenses after the budget was added
+        }
+        return total;
+      }, 0);
+  
+      // Calculate the remaining budget
+      const remainingBudget = user.budget.amount - totalExpenses;
+  
+      res.status(200).json({
+        remainingBudget,
+        totalExpenses,
+        budget: user.budget.amount,
+        message: 'Remaining budget calculated successfully.',
+      });
+    } catch (err) {
+      res.status(500).json({ message: 'Server error.', error: err.message });
+    }
+  });
+  
+
   
   
 

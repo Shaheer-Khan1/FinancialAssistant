@@ -101,7 +101,7 @@ export default function Crypto() {
 
   return (
     <div>
-      <h1>Crypto Portfolio</h1>
+      <h3>Crypto Portfolio</h3>
 
       {/* Error message if any */}
       {error && <div style={{ color: 'red' }}>{error}</div>}

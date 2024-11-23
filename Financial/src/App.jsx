@@ -6,6 +6,8 @@ import Income from '../Pages/Income/Income';
 import './App.css'; // Import custom CSS
 import CryptoDashboard from '../Pages/CryptoDashboard/CryptoDashboard';
 import ZakatCalculator from '../Pages/ZakatCalc/ZakatCalculator';
+import Expense from '../Pages/Expenses/Expenses';
+import Budget from '../Pages/Budget/Budget';
 
 const App = () => {
   return (
@@ -16,6 +18,8 @@ const App = () => {
           <Route path="/income" element={<Income />} />
           <Route path="/crypto" element={<CryptoDashboard />} />
           <Route path="/zakat" element={<ZakatCalculator />} />
+          <Route path="/expenses" element={<Expense/>}/>
+          <Route path="/budget" element={<Budget/>}/>
     </Routes>  
     </div>
   );

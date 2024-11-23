@@ -1,81 +1,114 @@
-/* Dashboard.css */
-
 /* Dashboard Container */
 .dashboard-container {
-    background-color: #f4f7fb; /* Soft background color */
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: #333;
-    padding: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #f4f7fb; /* Soft background color */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+  padding: 20px;
+  max-width: 100%;
+  margin: 0 auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 2);
+}
+
+/* Heading styles with animation */
+.dashboard-container h1 {
+  font-size: 5rem;
+  color: black;
+  margin-bottom: 4%;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(-50px);
+  animation: fallIntoPlace 2s forwards; /* Apply animation */
+}
+
+/* Define the falling text animation */
+@keyframes fallIntoPlace {
+  0% {
+      opacity: 0;
+      transform: translateY(-50px); /* Start above */
   }
-  
-  /* Heading styles */
-  .dashboard-container h1 {
-    font-size: 2.5rem;
-    color: #3b3b3b;
-    margin-bottom: 20px;
+  50% {
+      opacity: 0.5;
+      transform: translateY(10px); /* Midway position */
   }
-  
-  .dashboard-container h2 {
-    font-size: 1.8rem;
-    color: #333;
-    margin-bottom: 15px;
+  100% {
+      opacity: 1;
+      transform: translateY(0); /* End in place */
   }
-  
-  .dashboard-container p {
-    font-size: 1.2rem;
-    color: #555;
-  }
-  
-  /* Error message style */
-  .error-message {
-    color: red;
-    font-size: 1.5rem;
-    text-align: center;
-    padding: 20px;
-    border: 2px solid red;
-    background-color: #ffcccc;
-    border-radius: 8px;
-  }
+}
+
+/* Other styles remain unchanged */
+.dashboard-container h2 {
+  font-size: 1.8rem;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.dashboard-container p {
+  font-size: 1.2rem;
+  color: #555;
+}
+
+/* Error message style */
+.error-message {
+  color: red;
+  font-size: 1.5rem;
+  text-align: center;
+  padding: 20px;
+  border: 2px solid red;
+  background-color: #ffcccc;
+  border-radius: 8px;
+}
+
+/* Other sections and styles remain the same as in your original code... */
+
   
   /* Overview Section */
   .overview {
-    background-color: #fff;
+    background-color: #584A99;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2%;
+    
+  }
+
+  .overview h2{
+    font-size: 3rem;
+    font-weight: bold;
+    color: white;
   }
   
   .overview p {
     font-size: 1.5rem;
-    font-weight: bold;
-    color: #4caf50;
+    font-weight: 500;
+    color: black;
   }
   
   /* Income Section */
   .income-section {
-    background-color: #fff;
+    background-color: #518D9A;
     padding: 20px;
     border-radius: 10px;
+    color: white;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   }
   
   .income-section h2 {
-    color: #333;
+    font-size: 3rem;
+    font-weight: bold;
+    color: white;
   }
   
   .income-section p {
-    color: #555;
+    color: white;
     font-size: 1.1rem;
     margin-bottom: 15px;
   }
   
   /* Expenses Section */
   .expenses-section {
-    background-color: #fff;
+    background-color: #FFC000;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -213,32 +246,49 @@
   }
   
   /* Button Styles for each Section */
-  .income-section .button,
-  .expenses-section .button,
-  .budget-section .button,
-  .savings-section .button,
-  .crypto-section .button,
-  .zakat-section .button,
-  .debts-section .button,
-  .subscriptions-section .button {
-    padding: 10px 20px;
-    font-size: 1rem;
-    color: white;
-    background-color: #4caf50;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .income-section .button:hover,
-  .expenses-section .button:hover,
-  .budget-section .button:hover,
-  .savings-section .button:hover,
-  .crypto-section .button:hover,
-  .zakat-section .button:hover,
-  .debts-section .button:hover,
-  .subscriptions-section .button:hover {
-    background-color: #45a049;
-  }
-  
+.dashboard-container button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  color: white;
+  background-color: black;  /* Original button background */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  position: relative;  /* Necessary for the glow effect */
+  z-index: 1;
+  overflow: hidden;  /* Hide the glow that goes beyond the button */
+}
+
+.dashboard-container button:hover {
+  background-color: black;  /* Slightly darker background on hover */
+}
+
+/* Glow effect on button edges with dark colors */
+.dashboard-container button:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, #2c3e50, #34495e, #1abc9c, #16a085, #2980b9, #8e44ad);  /* Dark gradient colors */
+  background-size: 400%;
+  z-index: -1;
+  filter: blur(5px);
+  width: 100%;
+  height: 100%;
+  animation: glowing 20s linear infinite;
+  opacity: 0;
+  border-radius: 5px;  /* Same as the button border radius */
+  box-sizing: border-box;
+}
+
+.dashboard-container button:hover:before {
+  opacity: 1;  /* Make glow visible on hover */
+}
+
+@keyframes glowing {
+  0% { background-position: 0 0; }
+  50% { background-position: 400% 0; }
+  100% { background-position: 0 0; }
+}
