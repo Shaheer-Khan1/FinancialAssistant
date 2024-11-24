@@ -349,12 +349,12 @@ router.post('/savings', async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    // Save the savings details
-    user.savings = {
+    // Push the new savings entry into the savings array
+    user.savings.push({
       amount,
       description,
       date: date ? new Date(date) : new Date(), // Use the provided date or the current date
-    };
+    });
 
     await user.save();
 
@@ -364,6 +364,7 @@ router.post('/savings', async (req, res) => {
     res.status(500).json({ message: 'Server error. Please try again later.' });
   }
 });
+
 
 // GET route to retrieve user savings
 router.get('/savings/:email', async (req, res) => {

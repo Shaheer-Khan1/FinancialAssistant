@@ -6,6 +6,7 @@ import Crypto from '../../Components/Crypto';
 import ExpenseChart from '../../Components/ExpenseChart';
 import HighestBudget from '../../Components/HighestBudget';
 import BudgetRemaining from '../../Components/BudgetRemaining';
+import SavingChart from '../../Components/SavingChart';
 
 export default function Dashboard() {
   const [userData, setUserData] = useState(null); // Store user data
@@ -100,6 +101,7 @@ export default function Dashboard() {
       {/* Savings Section */}
       <section className="savings-section">
         <h2>Savings</h2>
+        <SavingChart/>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet, nulla et dictum interdum, nisi lorem egestas odio, vitae scelerisque enim ligula venenatis dolor.</p>
         <button onClick={() => navigate('/savings')}>Track Savings</button>
       </section>
