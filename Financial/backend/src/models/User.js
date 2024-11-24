@@ -5,8 +5,13 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   
-  // New fields
-  savings: { type: Number, default: 0 },  // User savings
+  savings: [{
+    amount: { type: Number, default: 0 },  // User savings amount
+    description: { type: String, default: '' },  // Description of savings
+    date: { type: Date, default: Date.now }  // Date of savings entry
+  }],
+  
+  
   expenses: { type: [Object], default: [] },  // List of expenses (could include date, amount, description)
   budget: {
     amount: { type: Number, default: 0 },  // Amount of the budget

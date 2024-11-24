@@ -4,7 +4,6 @@ import axios from 'axios';
 export default function Budget() {
   const [amount, setAmount] = useState(0);
   const [duration, setDuration] = useState('1 month');
-  const [email, setEmail] = useState('');
 
   // Handle form submission
   const handleSubmit = async (e) => {
@@ -12,20 +11,20 @@ export default function Budget() {
 
     // Retrieve email from local storage
     const userData = JSON.parse(localStorage.getItem('userData'));
-    const emailFromStorage = userData?.email;
+    const email = userData?.email;
 
     // Get the current date
     const currentDate = new Date().toISOString();
 
-    if (emailFromStorage) {
+    if (email) {
       try {
-        // Send POST request to the backend with the date included
+        // Send POST request to the backend with email in the request body
         const response = await axios.post('http://localhost:5000/api/auth/budget', {
-          email: emailFromStorage,
+          email,
           budget: {
             amount,
             duration,
-            date: currentDate, // Add the date to the request body
+            date: currentDate, // Include the date in the request body
           },
         });
         console.log('Budget saved successfully', response.data);
@@ -46,7 +45,7 @@ export default function Budget() {
           <input
             type="number"
             value={amount}
-            onChange={(e) => setAmount(e.target.value)}
+            onChange={(e) => setAmount(Number(e.target.value))}
             required
           />
         </div>

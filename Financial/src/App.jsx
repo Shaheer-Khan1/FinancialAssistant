@@ -9,6 +9,7 @@ import ZakatCalculator from '../Pages/ZakatCalc/ZakatCalculator';
 import Expense from '../Pages/Expenses/Expenses';
 import Budget from '../Pages/Budget/Budget';
 import ScrollWheelNavbar from '../Components/Navbar';
+import Savings from '../Pages/Savings/Savings';
 
 const App = () => {
   return (
@@ -22,6 +23,7 @@ const App = () => {
           <Route path="/zakat" element={<ZakatCalculator />} />
           <Route path="/expenses" element={<Expense/>}/>
           <Route path="/budget" element={<Budget/>}/>
+          <Route path="/savings" element={<Savings/>}/>
     </Routes>  
     </div>
   );

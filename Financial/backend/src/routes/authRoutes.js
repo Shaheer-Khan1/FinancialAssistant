@@ -5,6 +5,8 @@ import User from '../models/User.js';
 
 const router = express.Router();
 
+
+
 router.post('/register', async (req, res) => {
     console.log('Received register request');
     console.log('Request Body:', req.body);  // Check the request body
@@ -44,6 +46,7 @@ router.post('/register', async (req, res) => {
 
 
 router.post('/login', async (req, res) => {
+  console.log(req.body);
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ email });
@@ -215,6 +218,7 @@ router.get('/getUserData', async (req, res) => {
   });
   
   router.post('/budget', async (req, res) => {
+    console.log(req.body);
     const { email, budget } = req.body;
   
     try {
@@ -322,6 +326,70 @@ router.get('/getUserData', async (req, res) => {
     }
   });
   
+
+  // POST route to save user savings
+router.post('/savings', async (req, res) => {
+  console.log('Received data:', req.body); // Debugging purpose
+  const { email, amount, description, date } = req.body;
+
+  // Validate request body
+  if (!email || !amount || !description) {
+    return res.status(400).json({ message: 'Please provide email, amount, and description' });
+  }
+
+  if (isNaN(amount)) {
+    return res.status(400).json({ message: 'Amount must be a valid number' });
+  }
+
+  try {
+    // Find the user by email
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Save the savings details
+    user.savings = {
+      amount,
+      description,
+      date: date ? new Date(date) : new Date(), // Use the provided date or the current date
+    };
+
+    await user.save();
+
+    res.status(200).json({ message: 'Savings saved successfully!' });
+  } catch (error) {
+    console.error('Error saving savings:', error);
+    res.status(500).json({ message: 'Server error. Please try again later.' });
+  }
+});
+
+// GET route to retrieve user savings
+router.get('/savings/:email', async (req, res) => {
+  console.log(req.params); // Logs the request parameters (email)
+  const { email } = req.params;
+
+  if (!email) {
+    return res.status(400).json({ message: 'Email is required' });
+  }
+
+  try {
+    const user = await User.findOne({ email });
+
+    if (!user || !user.savings) {
+      return res.status(404).json({ message: 'No savings found for this user' });
+    }
+
+    // Log the savings data before sending it back
+    console.log('User Savings:', user.savings);
+
+    res.status(200).json({ savings: user.savings });
+  } catch (error) {
+    console.error('Error retrieving savings:', error);
+    res.status(500).json({ message: 'Server error. Please try again later.' });
+  }
+});
 
   
   
