@@ -24,7 +24,14 @@ const userSchema = new mongoose.Schema({
       amount: { type: Number, default: 0 }, // Amount of the coin
     },
   ],
-  debts: { type: [Object], default: [] },  // List of debts (could include amount, creditor, due date)
+  debts: [
+    {
+      description: { type: String, default: '' },  // Description of the debt
+      amount: { type: Number, required: true },  // Amount of the debt
+      date: { type: Date, default: Date.now },  // Date of the debt
+      type: { type: String, enum: ['Taken', 'Lended'], required: true },  // Debt type: Taken or Lended
+    }
+  ],
   subscriptions: { type: [Object], default: [] },  // List of subscriptions (could include name, amount, frequency)
   
   income: [{
@@ -46,5 +53,7 @@ userSchema.pre('save', function (next) {
   this.updatedAt = Date.now();
   next();
 });
+
+
 
 export default mongoose.model('User', userSchema);

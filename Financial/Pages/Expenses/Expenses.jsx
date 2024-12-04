@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import '../Expenses/Expenses.css';
 
 export default function Expense() {
   const [expense, setExpense] = useState({ date: '', amount: '', description: '' });
   const [expenses, setExpenses] = useState([]); // State to hold the list of expenses
   const [error, setError] = useState('');
+  const [editingExpense, setEditingExpense] = useState(null); // New state to track the expense being edited
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -42,13 +44,60 @@ export default function Expense() {
     }
 
     try {
-      await axios.post('http://localhost:5000/api/auth/expenses', { ...expense, email });
-      alert('Expense added successfully!');
+      if (editingExpense) {
+        // If editing an existing expense, update it
+        await axios.put('http://localhost:5000/api/auth/expenses', {
+          email,
+          // Send old values along with new values
+          oldDate: editingExpense.date, // Pass old values for updating
+          oldAmount: editingExpense.amount,
+          oldDescription: editingExpense.description,
+          newDate: expense.date, // Send new updated values
+          newAmount: expense.amount,
+          newDescription: expense.description,
+        });
+        alert('Expense updated successfully!');
+      } else {
+        // If adding a new expense
+        await axios.post('http://localhost:5000/api/auth/expenses', { ...expense, email });
+        alert('Expense added successfully!');
+      }
+
       setExpense({ date: '', amount: '', description: '' });
-      fetchExpenses(); // Refresh the expense list after adding
+      setEditingExpense(null); // Reset the editing state
+      fetchExpenses(); // Refresh the expense list after adding/updating
     } catch (err) {
-      alert(err.response?.data?.message || 'Error adding expense.');
+      alert(err.response?.data?.message || 'Error adding/updating expense.');
     }
+  };
+
+  const handleDelete = async (date, amount, description) => {
+    const userData = JSON.parse(localStorage.getItem('userData'));
+    const email = userData?.email;
+
+    if (!email) {
+      alert('User email not found. Please log in again.');
+      return;
+    }
+
+    try {
+      await axios.delete('http://localhost:5000/api/auth/expenses', {
+        data: { email, date, amount, description },
+      });
+      alert('Expense deleted successfully!');
+      fetchExpenses(); // Refresh the expense list after deletion
+    } catch (err) {
+      alert(err.response?.data?.message || 'Error deleting expense.');
+    }
+  };
+
+  const handleUpdate = (expenseToEdit) => {
+    setExpense({
+      date: expenseToEdit.date,
+      amount: expenseToEdit.amount,
+      description: expenseToEdit.description,
+    });
+    setEditingExpense(expenseToEdit); // Set the expense you're editing
   };
 
   useEffect(() => {
@@ -56,9 +105,9 @@ export default function Expense() {
   }, []);
 
   return (
-    <div>
+    <div className="expense-container">
       <form onSubmit={handleSubmit}>
-        <h2>Add Expense</h2>
+        <h2>{editingExpense ? 'Update Expense' : 'Add Expense'}</h2>
         <input
           type="date"
           name="date"
@@ -82,20 +131,27 @@ export default function Expense() {
           placeholder="Description"
           required
         />
-        <button type="submit">Add Expense</button>
+        <button type="submit">{editingExpense ? 'Update Expense' : 'Add Expense'}</button>
       </form>
 
-      <div>
+      <div className="expense-list">
         <h2>Your Expenses</h2>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
+        {error && <p className="error-message">{error}</p>}
         {expenses.length === 0 ? (
           <p>No expenses found.</p>
         ) : (
           <ul>
             {expenses.map((exp, index) => (
               <li key={index}>
-                <strong>Date:</strong> {exp.date} | <strong>Amount:</strong> ${exp.amount} |{' '}
-                <strong>Description:</strong> {exp.description}
+                <strong>Date:</strong> <span>{exp.date}</span>
+                <strong>Amount:</strong> <span>${exp.amount}</span>
+                <strong>Description:</strong> <span>{exp.description}</span>
+                <button onClick={() => handleUpdate(exp)}>
+                  Update
+                </button>
+                <button onClick={() => handleDelete(exp.date, exp.amount, exp.description)}>
+                  Delete
+                </button>
               </li>
             ))}
           </ul>

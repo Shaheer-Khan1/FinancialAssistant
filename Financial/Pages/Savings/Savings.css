@@ -1,0 +1,117 @@
+/* General Container Styling */
+.savings-container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: #fefefe;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    font-family: 'Arial', sans-serif;
+    color: #333;
+}
+
+/* Headings */
+.savings-container h1, .savings-container h2 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 20px;
+    font-size: 24px;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 10px;
+}
+
+/* Form Styling */
+.savings-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.savings-container form div {
+    display: flex;
+    flex-direction: column;
+}
+
+.savings-container label {
+    font-size: 14px;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+.savings-container input {
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    transition: border-color 0.3s ease;
+}
+
+.savings-container input:focus {
+    border-color: #28a745;
+    outline: none;
+    box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
+}
+
+.savings-container button {
+    width: 100%;
+    background-color: #007bff;
+    color: white;
+    font-size: 16px;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.savings-container button:hover {
+    background-color: #0056b3;
+}
+
+/* Messages */
+.error-message, .success-message {
+    font-size: 14px;
+    text-align: center;
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.error-message {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.success-message {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+/* Savings List */
+.savings-list {
+    margin-top: 30px;
+}
+
+.savings-list ul {
+    list-style: none;
+    padding: 0;
+}
+
+.savings-list li {
+    padding: 15px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    font-size: 14px;
+}
+
+.savings-list li strong {
+    color: #2c3e50;
+}

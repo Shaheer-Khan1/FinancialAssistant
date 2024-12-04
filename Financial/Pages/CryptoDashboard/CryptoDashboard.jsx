@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import './CryptoDashboard.css'
 
 export default function CryptoDashboard() {
   const [coinList, setCoinList] = useState([]);

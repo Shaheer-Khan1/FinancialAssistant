@@ -8,13 +8,14 @@ import CryptoDashboard from '../Pages/CryptoDashboard/CryptoDashboard';
 import ZakatCalculator from '../Pages/ZakatCalc/ZakatCalculator';
 import Expense from '../Pages/Expenses/Expenses';
 import Budget from '../Pages/Budget/Budget';
-import ScrollWheelNavbar from '../Components/Navbar';
+import Navbar from '../Components/Navbar';
 import Savings from '../Pages/Savings/Savings';
+import Debts from '../Pages/Debts/Debts';
 
 const App = () => {
   return (
     <div>
-      <ScrollWheelNavbar/>
+      
     <Routes> 
           <Route path="/" element={<LoginRegister />} />
           <Route path="/dashboard" element={<Dashboard />} />
@@ -24,6 +25,7 @@ const App = () => {
           <Route path="/expenses" element={<Expense/>}/>
           <Route path="/budget" element={<Budget/>}/>
           <Route path="/savings" element={<Savings/>}/>
+          <Route path="/debts" element={<Debts/>}/>
     </Routes>  
     </div>
   );

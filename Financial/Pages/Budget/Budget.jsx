@@ -1,65 +1,66 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState } from "react";
+import axios from "axios";
+import "../Budget/Budget.css";
 
 export default function Budget() {
-  const [amount, setAmount] = useState(0);
-  const [duration, setDuration] = useState('1 month');
+	const [amount, setAmount] = useState(0);
+	const [duration, setDuration] = useState("1 month");
 
-  // Handle form submission
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+	// Handle form submission
+	const handleSubmit = async (e) => {
+		e.preventDefault();
 
-    // Retrieve email from local storage
-    const userData = JSON.parse(localStorage.getItem('userData'));
-    const email = userData?.email;
+		// Retrieve email from local storage
+		const userData = JSON.parse(localStorage.getItem("userData"));
+		const email = userData?.email;
 
-    // Get the current date
-    const currentDate = new Date().toISOString();
+		// Get the current date
+		const currentDate = new Date().toISOString();
 
-    if (email) {
-      try {
-        // Send POST request to the backend with email in the request body
-        const response = await axios.post('http://localhost:5000/api/auth/budget', {
-          email,
-          budget: {
-            amount,
-            duration,
-            date: currentDate, // Include the date in the request body
-          },
-        });
-        console.log('Budget saved successfully', response.data);
-      } catch (error) {
-        console.error('Error saving budget:', error);
-      }
-    } else {
-      console.error('Email not found in local storage');
-    }
-  };
+		if (email) {
+			try {
+				// Send POST request to the backend with email in the request body
+				const response = await axios.post("http://localhost:5000/api/auth/budget", {
+					email,
+					budget: {
+						amount,
+						duration,
+						date: currentDate, // Include the date in the request body
+					},
+				});
+				console.log("Budget saved successfully", response.data);
+			} catch (error) {
+				console.error("Error saving budget:", error);
+			}
+		} else {
+			console.error("Email not found in local storage");
+		}
+	};
 
-  return (
-    <div>
-      <h1>Set Your Budget</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Amount:</label>
-          <input
-            type="number"
-            value={amount}
-            onChange={(e) => setAmount(Number(e.target.value))}
-            required
-          />
-        </div>
-        <div>
-          <label>Duration:</label>
-          <input
-            type="text"
-            value={duration}
-            onChange={(e) => setDuration(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit">Save Budget</button>
-      </form>
-    </div>
-  );
+	return (
+		<div className='budget'>
+			<h1>Set Your Budget</h1>
+			<form onSubmit={handleSubmit}>
+				<div>
+					<label className='amount'>Amount:</label>
+					<input
+						type='number'
+						value={amount}
+						onChange={(e) => setAmount(Number(e.target.value))}
+						required
+					/>
+				</div>
+				<div>
+					<label className='duration'>Duration:</label>
+					<input
+						type='text'
+						value={duration}
+						onChange={(e) => setDuration(e.target.value)}
+						required
+					/>
+				</div>
+				<button type='submit'>Save Budget</button>
+			</form>
+		</div>
+	);
 }

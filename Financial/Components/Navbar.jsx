@@ -1,70 +1,42 @@
-import React from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom'; // Import useLocation from react-router-dom
+import React, { useState } from 'react';
+import { Link } from 'react-scroll'; // Import from 'react-scroll' for smooth scrolling
 import './Navbar.css';
 
-const ScrollWheelNavbar = () => {
-  const navigate = useNavigate(); // Hook to navigate programmatically
-  const location = useLocation(); // Hook to get the current location (route)
+const Navbar = () => {
+  // State to manage whether the menu is open or closed
+  const [isOpen, setIsOpen] = useState(false);
 
-  const logout = () => {
-    // Clear the local storage
-    localStorage.clear();
-
-    // Navigate to the home page after logout
-    navigate('/');
+  // Toggle the menu open/close
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
   };
 
-  // Don't render the navbar if the current route is "/"
-  if (location.pathname === '/') {
-    return null;
-  }
-
   return (
-    <div className="scroll-wheel-navbar">
-      <ul className="nav-list">
-        <li>
-          <Link to="/" className="nav-button">
-            <span>Home</span>
-          </Link>
-        </li>
-        <li>
-          <Link to="/dashboard" className="nav-button">
-            <span>Dashboard</span>
-          </Link>
-        </li>
-        <li>
-          <Link to="/income" className="nav-button">
-            <span>Income</span>
-          </Link>
-        </li>
-        <li>
-          <Link to="/crypto" className="nav-button">
-            <span>Crypto Dashboard</span>
-          </Link>
-        </li>
-        <li>
-          <Link to="/zakat" className="nav-button">
-            <span>Zakat Calculator</span>
-          </Link>
-        </li>
-        <li>
-          <Link to="/expenses" className="nav-button">
-            <span>Expenses</span>
-          </Link>
-        </li>
-        <li>
-          <Link to="/budget" className="nav-button">
-            <span>Budget</span>
-          </Link>
-        </li>
-        <li>
-          <button onClick={logout} className="nav-button">
-            <span>Logout</span>
-          </button>
-        </li>
+    <nav className="navbar">
+      <div className="logo">Logo</div>
+
+      {/* Hamburger Icon */}
+      <div className="hamburger" onClick={toggleMenu}>
+        <div className={`line ${isOpen ? 'open' : ''}`}></div>
+        <div className={`line ${isOpen ? 'open' : ''}`}></div>
+        <div className={`line ${isOpen ? 'open' : ''}`}></div>
+      </div>
+
+      {/* Navigation Links */}
+      <ul className={`nav-links ${isOpen ? 'open' : ''}`}>
+        <li><Link to="hero-section" smooth={true} duration={500}>Home</Link></li>
+        <li><Link to="income-section" smooth={true} duration={500}>Income</Link></li>
+        <li><Link to="expenses-section" smooth={true} duration={500}>Expenses</Link></li>
+        <li><Link to="budget-section" smooth={true} duration={500}>Budget</Link></li>
+        <li><Link to="savings-section" smooth={true} duration={500}>Savings</Link></li>
+        <li><Link to="crypto-section" smooth={true} duration={500}>Crypto</Link></li>
+        <li><Link to="zakat-section" smooth={true} duration={500}>Zakat</Link></li>
+        <li><Link to="debts-section" smooth={true} duration={500}>Debts</Link></li>
+        <li><Link to="subscriptions-section" smooth={true} duration={500}>Subscriptions</Link></li>
+        <li><Link to="motivational-tips" smooth={true} duration={500}>Motivational Tip</Link></li>
       </ul>
-    </div>
+    </nav>
   );
 };
 
-export default ScrollWheelNavbar;
+export default Navbar;

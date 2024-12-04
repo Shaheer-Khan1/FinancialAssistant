@@ -110,6 +110,67 @@ router.get('/getUserData', async (req, res) => {
       res.status(500).json({ message: 'Server error', error });
     }
   });
+
+  // Update income
+router.put('/incomes', async (req, res) => {
+  const { email, amount, source, oldAmount, oldSource, oldDate } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    // Find the income that needs to be updated
+    const incomeToUpdate = user.income.find(
+      (income) =>
+        income.amount === oldAmount &&
+        income.source === oldSource &&
+        income.date.toString() === new Date(oldDate).toString()
+    );
+
+    if (!incomeToUpdate) return res.status(404).json({ message: 'Income not found' });
+
+    // Update the income
+    incomeToUpdate.amount = amount;
+    incomeToUpdate.source = source;
+
+    await user.save();
+
+    res.status(200).json({ message: 'Income updated successfully', income: incomeToUpdate });
+  } catch (error) {
+    console.error('Error updating income:', error);
+    res.status(500).json({ message: 'Server error', error });
+  }
+});
+
+// Delete income
+router.delete('/incomes', async (req, res) => {
+  const { email, amount, source, date } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    // Find the income to delete
+    const incomeIndex = user.income.findIndex(
+      (income) =>
+        income.amount === amount &&
+        income.source === source &&
+        income.date.toString() === new Date(date).toString()
+    );
+
+    if (incomeIndex === -1) return res.status(404).json({ message: 'Income not found' });
+
+    // Remove the income
+    user.income.splice(incomeIndex, 1);
+    await user.save();
+
+    res.status(200).json({ message: 'Income deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting income:', error);
+    res.status(500).json({ message: 'Server error', error });
+  }
+});
+
   
   router.post('/crypto', async (req, res) => {
     const { email, coinName, amount } = req.body;  // Expecting email from the frontend
@@ -216,9 +277,73 @@ router.get('/getUserData', async (req, res) => {
       res.status(500).json({ message: 'Server error.', error: err.message });
     }
   });
+
+  // Delete an expense
+router.delete('/expenses', async (req, res) => {
+  const { email, date, amount, description } = req.body;
+
+  if (!email || !date || !amount || !description) {
+    return res.status(400).json({ message: 'Email, date, amount, and description are required.' });
+  }
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+
+    // Remove the expense that matches date, amount, and description
+    user.expenses = user.expenses.filter(expense =>
+      !(expense.date === date && expense.amount === amount && expense.description === description)
+    );
+    await user.save();
+
+    res.status(200).json({ message: 'Expense deleted successfully.', expenses: user.expenses });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error.', error: err.message });
+  }
+});
+
+
+router.put('/expenses', async (req, res) => {
+  console.log(req.body);
+  const { email, oldDate, oldAmount, oldDescription, newDate, newAmount, newDescription } = req.body;
+
+  if (!email || !oldDate || !oldAmount || !oldDescription || !newDate || !newAmount || !newDescription) {
+    return res.status(400).json({ message: 'Email, oldDate, oldAmount, oldDescription, newDate, newAmount, and newDescription are required.' });
+  }
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+
+    const expense = user.expenses.find(
+      exp => exp.date === oldDate && exp.amount === oldAmount && exp.description === oldDescription
+    );
+
+    if (!expense) {
+      return res.status(404).json({ message: 'Expense not found.' });
+    }
+
+    // Update the expense's date, amount, and description
+    expense.date = newDate;
+    expense.amount = newAmount;
+    expense.description = newDescription;
+
+    await user.save();
+
+    res.status(200).json({ message: 'Expense updated successfully.', expenses: user.expenses });
+  } catch (err) {
+    res.status(500).json({ message: 'Server error.', error: err.message });
+  }
+});
+
+
   
   router.post('/budget', async (req, res) => {
-    console.log(req.body);
+    
     const { email, budget } = req.body;
   
     try {
@@ -365,6 +490,88 @@ router.post('/savings', async (req, res) => {
   }
 });
 
+// Update savings entry based on email, amount, and description
+router.put('/savings', async (req, res) => {
+  const { email, oldAmount, oldDescription, oldDate, amount, description, date } = req.body;
+
+  if (!email || !oldAmount || !oldDescription || !oldDate || !amount || !description) {
+    return res.status(400).json({ message: 'Please provide email, old amount, old description, old date, new amount, new description' });
+  }
+
+  if (isNaN(amount) || isNaN(oldAmount)) {
+    return res.status(400).json({ message: 'Amount must be a valid number' });
+  }
+
+  try {
+    // Find the user by email
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Find the savings entry to update using old values (oldAmount, oldDescription, oldDate)
+    const saving = user.savings.find(s => 
+      s.amount === oldAmount &&
+      s.description === oldDescription &&
+      new Date(s.date).toLocaleDateString() === new Date(oldDate).toLocaleDateString() // Match old date as well
+    );
+
+    if (!saving) {
+      return res.status(404).json({ message: 'Matching savings entry not found' });
+    }
+
+    // Update the found entry with the new values
+    saving.amount = amount;
+    saving.description = description;
+    saving.date = date ? new Date(date) : new Date(); // Use the provided date or the current date
+
+    await user.save();
+
+    res.status(200).json({ message: 'Savings updated successfully!' });
+  } catch (error) {
+    console.error('Error updating savings:', error);
+    res.status(500).json({ message: 'Server error. Please try again later.' });
+  }
+});
+
+
+// Delete savings entry based on email, amount, and description
+router.delete('/savings', async (req, res) => {
+  const { email, amount, description } = req.body;
+
+  if (!email || !amount || !description) {
+    return res.status(400).json({ message: 'Please provide email, amount, and description' });
+  }
+
+  try {
+    // Find the user by email
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Find the index of the savings entry to delete
+    const index = user.savings.findIndex(s => s.amount === amount && s.description === description);
+
+    if (index === -1) {
+      return res.status(404).json({ message: 'Matching savings entry not found' });
+    }
+
+    // Remove the savings entry from the array
+    user.savings.splice(index, 1);
+
+    await user.save();
+
+    res.status(200).json({ message: 'Savings deleted successfully!' });
+  } catch (error) {
+    console.error('Error deleting savings:', error);
+    res.status(500).json({ message: 'Server error. Please try again later.' });
+  }
+});
+
+
 
 // GET route to retrieve user savings
 router.get('/savings/:email', async (req, res) => {
@@ -391,6 +598,82 @@ router.get('/savings/:email', async (req, res) => {
     res.status(500).json({ message: 'Server error. Please try again later.' });
   }
 });
+
+
+// Add a debt
+router.post('/debts', async (req, res) => {
+
+  console.log(req.body);
+  const { email, description, amount, date, type } = req.body;
+
+  if (!email || !description || !amount || !date || !type) {
+    return res.status(400).json({ error: 'All fields are required.' });
+  }
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ error: 'User not found.' });
+    }
+
+    const newDebt = {
+      description,
+      amount,
+      date,
+      type,
+    };
+
+    user.debts.push(newDebt);
+    await user.save();
+
+    res.status(200).json({ message: 'Debt added successfully.', debt: newDebt });
+  } catch (error) {
+    console.error('Error adding debt:', error);
+    res.status(500).json({ error: 'Server error.' });
+  }
+});
+
+// POST route to get debts for a user
+router.post('/showdebts', async (req, res) => {
+  const { email } = req.body; // Email will now come from the body
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ error: 'User not found.' });
+    }
+
+    res.status(200).json({ debts: user.debts });
+  } catch (error) {
+    console.error('Error fetching debts:', error);
+    res.status(500).json({ error: 'Server error.' });
+  }
+});
+
+router.delete('/debts', async (req, res) => {
+  const { description, amount, date, type } = req.body;  // Receive debt details from frontend
+
+  try {
+    // Find the user by email and remove the debt by matching description, amount, date, and type
+    const user = await User.findOneAndUpdate(
+      { 'debts.description': description, 'debts.amount': amount, 'debts.date': date, 'debts.type': type },
+      { $pull: { debts: { description, amount, date, type } } },
+      { new: true }
+    );
+
+    if (!user) {
+      return res.status(404).json({ error: 'Debt not found.' });
+    }
+
+    res.status(200).json({ message: 'Debt successfully deleted.' });
+  } catch (error) {
+    console.error('Error deleting debt:', error);
+    res.status(500).json({ error: 'Server error.' });
+  }
+});
+
+
+
 
   
   

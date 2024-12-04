@@ -7,9 +7,10 @@ export default function Income() {
   const [amount, setAmount] = useState('');
   const [source, setSource] = useState('');
   const [incomes, setIncomes] = useState([]);
+  const [editMode, setEditMode] = useState(false);
+  const [currentIncome, setCurrentIncome] = useState(null); // For holding the income to be edited
   const navigate = useNavigate();
 
-  // Fetch incomes from the backend when the component mounts
   useEffect(() => {
     const fetchIncomes = async () => {
       try {
@@ -19,14 +20,10 @@ export default function Income() {
           return;
         }
 
-        console.log('Fetching incomes for:', userData.email);
-
-        // Fetch incomes for the logged-in user
         const response = await axios.get('http://localhost:5000/api/auth/incomes', {
           params: { email: userData.email },
         });
 
-        // Update state with fetched incomes
         setIncomes(response.data.incomes || []);
       } catch (error) {
         console.error('Error fetching incomes:', error);
@@ -45,36 +42,83 @@ export default function Income() {
         return;
       }
 
-      // Prepare the data to send
       const newIncome = { amount, source };
 
-      console.log('Sending data to backend:', {
-        email: userData.email,
-        ...newIncome,
-      });
+      if (editMode && currentIncome) {
+        // Update income if in edit mode
+        await axios.put('http://localhost:5000/api/auth/incomes', {
+          email: userData.email,
+          amount,
+          source,
+          oldAmount: currentIncome.amount,
+          oldSource: currentIncome.source,
+          oldDate: currentIncome.date,
+        });
 
-      // Send the data to the backend
-      const response = await axios.post('http://localhost:5000/api/auth/incomes', {
-        email: userData.email,
-        ...newIncome,
-      });
+        setIncomes((prevIncomes) =>
+          prevIncomes.map((income) =>
+            income.amount === currentIncome.amount &&
+            income.source === currentIncome.source &&
+            income.date === currentIncome.date
+              ? { ...income, amount, source }
+              : income
+          )
+        );
+      } else {
+        // Add income if not in edit mode
+        const response = await axios.post('http://localhost:5000/api/auth/incomes', {
+          email: userData.email,
+          amount,
+          source,
+        });
 
-      // Update state with the new income
-      setIncomes((prevIncomes) => [...prevIncomes, response.data.income]);
+        setIncomes((prevIncomes) => [...prevIncomes, response.data.income]);
+      }
+
       setAmount('');
       setSource('');
+      setEditMode(false);
+      setCurrentIncome(null);
     } catch (error) {
-      console.error('Error adding income:', error);
-      alert('Failed to add income. Please try again later.');
+      console.error('Error adding/updating income:', error);
+      alert('Failed to add or update income. Please try again later.');
     }
   };
 
-  // Calculate total income by summing the amount from each income entry
-  const totalIncome = incomes.reduce((total, income) => total + parseFloat(income.amount), 0);
+  const handleDeleteIncome = async (income) => {
+    try {
+      const userData = JSON.parse(localStorage.getItem('userData'));
+      if (!userData) {
+        navigate('/login');
+        return;
+      }
+
+      await axios.delete('http://localhost:5000/api/auth/incomes', {
+        data: {
+          email: userData.email,
+          amount: income.amount,
+          source: income.source,
+          date: income.date,
+        },
+      });
+
+      setIncomes(incomes.filter((inc) => inc.amount !== income.amount || inc.source !== income.source || inc.date !== income.date));
+    } catch (error) {
+      console.error('Error deleting income:', error);
+      alert('Failed to delete income. Please try again later.');
+    }
+  };
+
+  const handleEditIncome = (income) => {
+    setEditMode(true);
+    setCurrentIncome(income);
+    setAmount(income.amount);
+    setSource(income.source);
+  };
 
   return (
     <div className="income-container">
-      <h1>Add Income</h1>
+      <h1>{editMode ? 'Edit Income' : 'Add Income'}</h1>
       <div className="form-group">
         <label>Amount:</label>
         <input
@@ -93,7 +137,7 @@ export default function Income() {
           placeholder="Enter income source"
         />
       </div>
-      <button onClick={handleAddIncome}>Add Income</button>
+      <button onClick={handleAddIncome}>{editMode ? 'Update Income' : 'Add Income'}</button>
 
       <h2>Your Incomes</h2>
       <ul>
@@ -102,11 +146,11 @@ export default function Income() {
             <p>Amount: ${income.amount}</p>
             <p>Source: {income.source}</p>
             <p>Date: {new Date(income.date).toLocaleDateString()}</p>
+            <button onClick={() => handleEditIncome(income)}>Edit</button>
+            <button onClick={() => handleDeleteIncome(income)}>Delete</button>
           </li>
         ))}
       </ul>
-
-      <h3>Total Income: ${totalIncome.toFixed(2)}</h3>
     </div>
   );
 }

@@ -1,101 +1,60 @@
-/* ScrollWheelNavbar.css */
-.scroll-wheel-navbar {
+/* Basic Navbar Styling */
+.navbar {
+  background-color: #333;
+  padding: 10px 20px;
   position: fixed;
-  top: 20px; /* Positioning the circle at the top */
-  left: 0px; /* Position the circle to the left */
-  width: 20px; /* Small dot size initially */
-  height: 20px;
-  border-radius: 50%; /* Circular shape */
-  background-color: #4e5d6d; /* Dark color for the circle */
-  box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.3);
-  transition: width 0.3s ease, left 0.3s ease; /* Transition for expanding and moving */
-  z-index: 100;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.navbar ul {
   display: flex;
-  align-items: center;
   justify-content: center;
-  cursor: pointer; /* Make it clickable */
-}
-
-.scroll-wheel-navbar:hover {
-  width: 50vw; /* Expand to show the full sidebar horizontally */
-  left: 20px; /* Align to the left edge */
-}
-
-.nav-list {
-  display: flex;
   align-items: center;
   list-style: none;
   margin: 0;
   padding: 0;
-  transition: opacity 0.3s ease;
-  opacity: 0; /* Initially hidden */
-  
 }
 
-.scroll-wheel-navbar:hover .nav-list {
-  opacity: 1; /* Reveal the menu when hovered */
+.navbar li {
+  margin: 0 15px;
 }
 
-.nav-button {
-  background-color: transparent;
-  color: white;
-  border: none;
-  font-size: 1.5rem;
-  text-align: center;
-  padding: 15px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0; /* Initially hidden */
-  transition: opacity 0.3s ease, padding-left 0.3s ease;
+.navbar a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 500;
+  padding: 10px 20px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.nav-button span {
-  margin-left: 10px;
-  font-size: 1.1rem;
-  opacity: 0; /* Initially hidden */
-  transition: opacity 0.3s ease, margin-left 0.3s ease;
+.navbar a:hover {
+  background-color: #007bff;
+  color: #fff;
 }
 
-.scroll-wheel-navbar:hover .nav-button {
-  opacity: 1; /* Make buttons visible when hovered */
-  padding-left: 15px; /* Elegant slide-in effect */
+.navbar a.active {
+  background-color: #0056b3;
+  color: #fff;
 }
 
-.scroll-wheel-navbar:hover .nav-button span {
-  opacity: 1; /* Show text when hovered */
-  margin-left: 15px; /* Smoothly slide in the text */
-}
-
-.nav-button:hover {
-  background-color: #1abc9c; /* Elegant hover color */
-}
-
-.nav-button:focus {
-  outline: none; /* Remove outline on focus */
-}
-
-/* Customize icons */
-.nav-button .fa-icon {
-  font-size: 1.5rem;
-}
-
-/* Add smooth transition for circle expanding */
-.scroll-wheel-navbar {
-  transition: width 0.5s ease, left 0.5s ease;
-}
-
-/* Mobile view adjustments */
+/* Mobile Responsiveness */
 @media (max-width: 768px) {
-  .scroll-wheel-navbar {
-    top: 10px;
-    left: 10px;
-    width: 40px;
-    height: 40px;
+  .navbar ul {
+    flex-direction: column;
+    align-items: center;
   }
 
-  .scroll-wheel-navbar:hover {
-    width: 250px; /* Adjust size for smaller screens */
+  .navbar li {
+    margin: 10px 0;
+  }
+
+  .navbar a {
+    font-size: 16px;
   }
 }
