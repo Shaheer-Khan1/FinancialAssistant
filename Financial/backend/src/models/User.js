@@ -6,37 +6,37 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
   
   savings: [{
-    amount: { type: Number, default: 0 },  // User savings amount
-    description: { type: String, default: '' },  // Description of savings
-    date: { type: Date, default: Date.now }  // Date of savings entry
+    amount: { type: Number, default: 0 },  
+    description: { type: String, default: '' },  
+    date: { type: Date, default: Date.now }  
   }],
   
   
-  expenses: { type: [Object], default: [] },  // List of expenses (could include date, amount, description)
+  expenses: { type: [Object], default: [] },  
   budget: {
-    amount: { type: Number, default: 0 },  // Amount of the budget
-    duration: { type: String, default: '1 month' },  // Duration of the budget (e.g., '1 month', '1 year')
+    amount: { type: Number, default: 0 },  
+    duration: { type: String, default: '1 month' },  
   },
-  budgetDate: Date, // Add this field to track the date when the budget was added
+  budgetDate: Date, 
   cryptoBalance: [
     {
-      coinName: { type: String, required: true }, // Coin name (e.g., Bitcoin, Ethereum)
-      amount: { type: Number, default: 0 }, // Amount of the coin
+      coinName: { type: String, required: true }, 
+      amount: { type: Number, default: 0 }, 
     },
   ],
   debts: [
     {
-      description: { type: String, default: '' },  // Description of the debt
-      amount: { type: Number, required: true },  // Amount of the debt
-      date: { type: Date, default: Date.now },  // Date of the debt
+      description: { type: String, default: '' },  
+      amount: { type: Number, required: true },  
+      date: { type: Date, default: Date.now },  
       type: { type: String, enum: ['Taken', 'Lended'], required: true },  // Debt type: Taken or Lended
     }
   ],
-  subscriptions: { type: [Object], default: [] },  // List of subscriptions (could include name, amount, frequency)
+  subscriptions: { type: [Object], default: [] },  // List of subscriptions 
   
   income: [{
     amount: { type: Number  },  // Income amount
-    source: { type: String},  // Source of income (e.g., job, investment, etc.)
+    source: { type: String},  // Source of income 
     date: { type: Date, default: Date.now },  // Date when the income was received
   }],
   
@@ -48,7 +48,6 @@ const userSchema = new mongoose.Schema({
   updatedAt: { type: Date, default: Date.now },  // Last updated date
 });
 
-// Update `updatedAt` field whenever the user document is modified
 userSchema.pre('save', function (next) {
   this.updatedAt = Date.now();
   next();

@@ -8,7 +8,6 @@ export default function BudgetRemaining() {
 
   useEffect(() => {
     const fetchRemainingBudget = async () => {
-      // Retrieve email from localStorage
       const userData = JSON.parse(localStorage.getItem('userData'));
       const emailFromStorage = userData?.email;
 

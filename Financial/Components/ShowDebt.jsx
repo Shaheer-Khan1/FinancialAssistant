@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 export default function UserDebts() {
-  const [debts, setDebts] = useState([]);  // State for storing all debts
+  const [debts, setDebts] = useState([]);  
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -38,7 +38,6 @@ export default function UserDebts() {
   const lendedDebts = debts.filter(debt => debt.type === 'Lended');
   const takenDebts = debts.filter(debt => debt.type === 'Taken');
 
-  // Handle "Taken" button click (for lended debts)
   const handleTakenClick = async (debt) => {
     try {
       await axios.delete('http://localhost:5000/api/auth/debts', {
@@ -46,7 +45,7 @@ export default function UserDebts() {
           description: debt.description,
           amount: debt.amount,
           date: debt.date,
-          type: 'Lended'  // Mark it as Lended if it's a Lended debt
+          type: 'Lended'  
         }
       });
       setDebts((prevDebts) => prevDebts.filter(item => item.description !== debt.description || item.amount !== debt.amount || item.date !== debt.date));
@@ -57,7 +56,6 @@ export default function UserDebts() {
     }
   };
 
-  // Handle "Lended" button click (for taken debts)
   const handleLendedClick = async (debt) => {
     try {
       await axios.delete('http://localhost:5000/api/auth/debts', {
@@ -65,7 +63,7 @@ export default function UserDebts() {
           description: debt.description,
           amount: debt.amount,
           date: debt.date,
-          type: 'Taken'  // Mark it as Taken if it's a Taken debt
+          type: 'Taken'  
         }
       });
       setDebts((prevDebts) => prevDebts.filter(item => item.description !== debt.description || item.amount !== debt.amount || item.date !== debt.date));
@@ -80,7 +78,6 @@ export default function UserDebts() {
     <div style={{ padding: '20px' }}>
 
       <div style={{ display: 'flex', justifyContent: 'space-between', gap: '20px' }}>
-        {/* Lended Debts Table */}
         <div style={{ flex: 1, border: '1px solid #ddd', padding: '10px', margin: '10px' }}>
           <h2 style={{ textAlign: 'center' }}>Lended Debts</h2>
           {lendedDebts.length === 0 ? (
@@ -120,7 +117,6 @@ export default function UserDebts() {
           )}
         </div>
 
-        {/* Taken Debts Table */}
         <div style={{ flex: 1, border: '1px solid #ddd', padding: '10px', margin: '10px' }}>
           <h2 style={{ textAlign: 'center' }}>Taken Debts</h2>
           {takenDebts.length === 0 ? (

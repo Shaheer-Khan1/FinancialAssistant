@@ -1,147 +1,139 @@
-import React, { useState, useEffect } from "react";
-import "../ZakatCalc/ZakatCalculator.css";
+import React, { useState } from "react";
+import "./ZakatCalculator.css";
+
 export default function ZakatCalculator() {
-	const [goldPricePerTola, setGoldPricePerTola] = useState(null);
-	const [silverPricePerTola, setSilverPricePerTola] = useState(null);
-	const [cash, setCash] = useState(0);
-	const [goldInTola, setGoldInTola] = useState(0);
-	const [silverInTola, setSilverInTola] = useState(0);
-	const [businessAssets, setBusinessAssets] = useState(0);
-	const [debtsOwed, setDebtsOwed] = useState(0);
-	const [debtsReceivable, setDebtsReceivable] = useState(0);
-	const [zakatAmount, setZakatAmount] = useState(null);
-	const [nisabValue, setNisabValue] = useState(0);
+  const [cashAndSavings, setCashAndSavings] = useState(0);
+  const [goldInTola, setGoldInTola] = useState(0);
+  const [businessAssets, setBusinessAssets] = useState(0);
+  const [debtsOwed, setDebtsOwed] = useState(0);
+  const [zakatAmount, setZakatAmount] = useState(null);
+  const [nisabValue, setNisabValue] = useState(0);
 
-	const nisabTola = 7.3; // Nisab in tola of gold
+  const goldPricePerTola = 284100; // gold price in PKR
+  const silverPricePerTola = 3351; // silver price in PKR
+  const nisabTola = 7.5; // Nisab in tola of gold
 
-	// Fetch Gold and Silver Prices from CoinGecko API
-	useEffect(() => {
-		fetch("https://api.coingecko.com/api/v3/simple/price?ids=gold,silver&vs_currencies=usd")
-			.then((response) => response.json())
-			.then((data) => {
-				const goldPriceInUSD = data.gold.usd;
-				const silverPriceInUSD = data.silver.usd;
+  const fetchDebts = async () => {
+    const userData = JSON.parse(localStorage.getItem('userData'));
+    const email = userData.email; 
 
-				// Convert prices to per tola (1 tola = 11.663g, 1 ounce = 31.1035g)
-				setGoldPricePerTola((goldPriceInUSD * 31.1035) / 11.663); // USD per tola
-				setSilverPricePerTola((silverPriceInUSD * 31.1035) / 11.663); // USD per tola
-			})
-			.catch((error) => {
-				console.error("Error fetching gold and silver prices:", error);
-			});
-	}, []);
+    try {
+      const response = await fetch("http://localhost:5000/api/auth/showdebts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
 
-	const calculateNisabValue = () => {
-		return nisabTola * goldPricePerTola; // Nisab in currency value based on current gold price per tola
-	};
+      const data = await response.json();
 
-	const handleCalculate = () => {
-		const totalAssets = cash + goldInTola * goldPricePerTola + silverInTola * silverPricePerTola + businessAssets + debtsReceivable - debtsOwed;
+      if (response.ok) {
+        const totalDebts = data.debts.reduce((sum, debt) => sum + debt.amount, 0);
+        setDebtsOwed(totalDebts);
+      } else {
+        console.error("Error fetching debts:", data.error);
+      }
+    } catch (error) {
+      console.error("Error fetching debts:", error);
+    }
+  };
 
-		const nisab = calculateNisabValue();
-		setNisabValue(nisab);
+  const calculateNisabValue = () => {
+    return nisabTola * goldPricePerTola;
+  };
 
-		if (totalAssets >= nisab) {
-			const zakat = (totalAssets * 2.5) / 100;
-			setZakatAmount(zakat);
-		} else {
-			setZakatAmount(0);
-		}
-	};
+  const handleCalculate = () => {
+    const totalWealth =
+      cashAndSavings + goldInTola * goldPricePerTola + businessAssets - debtsOwed;
 
-	return (
-		<div className='zakatcalculator'>
-			<h1>Zakat Calculator</h1>
-			<form>
-				<div className='form-1'>
-					<label>Cash and Savings (in your currency):</label>
-					<input
-						type='number'
-						value={cash}
-						onChange={(e) => setCash(parseFloat(e.target.value))}
-					/>
-				</div>
-				<div>
-					<label>Gold Price per Tola (in your currency):</label>
-					<input
-						className='gold-price'
-						type='number'
-						value={goldPricePerTola || ""}
-						readOnly
-					/>
+    const nisab = calculateNisabValue();
+    setNisabValue(nisab);
 
-					<label>Gold (in tola):</label>
-					<input
-						type='number'
-						value={goldInTola}
-						onChange={(e) => setGoldInTola(parseFloat(e.target.value))}
-					/>
-				</div>
+    if (totalWealth >= nisab) {
+      const zakat = (totalWealth * 2.5) / 100;
+      setZakatAmount(zakat);
+    } else {
+      setZakatAmount(0);
+    }
+  };
 
-				<div className=' silver-container'>
-					<label>Silver Price per Tola (in your currency):</label>
-					<input
-						className='silver-price'
-						type='number'
-						value={silverPricePerTola || ""}
-						readOnly
-					/>
+  return (
+    <div className="zakat-calculator">
+      <h1>Zakat Calculator (PKR)</h1>
+      <p>
+        Calculate your Zakat based on the current price of gold and your total
+        assets. The Nisab threshold is determined by 7.5 tola of gold.
+      </p>
+      <form>
+        <div>
+          <label>Cash and Savings (PKR):</label>
+          <input
+            type="number"
+            value={cashAndSavings}
+            onChange={(e) => setCashAndSavings(parseFloat(e.target.value) || 0)}
+          />
+        </div>
 
-					<label>Silver (in tola):</label>
-					<input
-						type='number'
-						value={silverInTola}
-						onChange={(e) => setSilverInTola(parseFloat(e.target.value))}
-					/>
-				</div>
+        <div>
+          <label>Gold Price per Tola (PKR):</label>
+          <input type="number" value={goldPricePerTola.toFixed(2)} readOnly />
 
-				<div>
-					<label>Business Assets (in your currency):</label>
-					<input
-						type='number'
-						value={businessAssets}
-						onChange={(e) => setBusinessAssets(parseFloat(e.target.value))}
-					/>
-				</div>
+          <label>Gold in Tola:</label>
+          <input
+            type="number"
+            value={goldInTola}
+            onChange={(e) => setGoldInTola(parseFloat(e.target.value) || 0)}
+          />
+        </div>
 
-				<div>
-					<label>Debts Owed to You (Receivable): </label>
-					<input
-						type='number'
-						value={debtsReceivable}
-						onChange={(e) => setDebtsReceivable(parseFloat(e.target.value))}
-					/>
+        <div>
+          <label>Business Assets (PKR):</label>
+          <input
+            type="number"
+            value={businessAssets}
+            onChange={(e) => setBusinessAssets(parseFloat(e.target.value) || 0)}
+          />
+        </div>
 
-					<label>Debts You Owe:</label>
-					<input
-						type='number'
-						value={debtsOwed}
-						onChange={(e) => setDebtsOwed(parseFloat(e.target.value))}
-					/>
-				</div>
+        <div>
+          <label>Debts You Owe (PKR):</label>
+          <button type="button" onClick={fetchDebts}>Fetch Debts</button>
+          <input
+            type="number"
+            value={debtsOwed}
+            readOnly
+          />
+        </div>
 
-				<button
-					type='button'
-					onClick={handleCalculate}>
-					Calculate Zakat
-				</button>
-			</form>
+        <button type="button" onClick={handleCalculate}>
+          Calculate Zakat
+        </button>
+      </form>
 
-			{zakatAmount !== null && (
-				<div className='zakat-result-container'>
-					{zakatAmount > 0 ? (
-						<>
-							<h2>Your Zakat Amount: {zakatAmount.toFixed(2)} (in your currency)</h2>
-							<p>Your total wealth meets the Nisab threshold of {nisabValue.toFixed(2)} (in your currency). Zakat is due.</p>
-						</>
-					) : (
-						<>
-							<h2>No Zakat Due</h2>
-							<p>Your total wealth is below the Nisab threshold of {nisabValue.toFixed(2)} (in your currency).</p>
-						</>
-					)}
-				</div>
-			)}
-		</div>
-	);
+      {zakatAmount !== null && (
+        <div className="zakat-result">
+          {zakatAmount > 0 ? (
+            <>
+              <h2>Your Zakat Amount: {zakatAmount.toFixed(2)} PKR</h2>
+              <p>
+                Your total wealth meets the Nisab threshold of {nisabValue.toFixed(
+                  2
+                )} PKR. Zakat is due.
+              </p>
+            </>
+          ) : (
+            <>
+              <h2>No Zakat Due</h2>
+              <p>
+                Your total wealth is below the Nisab threshold of {nisabValue.toFixed(
+                  2
+                )} PKR.
+              </p>
+            </>
+          )}
+        </div>
+      )}
+    </div>
+  );
 }

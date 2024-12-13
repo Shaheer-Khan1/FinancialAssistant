@@ -6,15 +6,12 @@ export default function Budget() {
 	const [amount, setAmount] = useState(0);
 	const [duration, setDuration] = useState("1 month");
 
-	// Handle form submission
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
-		// Retrieve email from local storage
 		const userData = JSON.parse(localStorage.getItem("userData"));
 		const email = userData?.email;
 
-		// Get the current date
 		const currentDate = new Date().toISOString();
 
 		if (email) {
@@ -25,7 +22,7 @@ export default function Budget() {
 					budget: {
 						amount,
 						duration,
-						date: currentDate, // Include the date in the request body
+						date: currentDate, 
 					},
 				});
 				console.log("Budget saved successfully", response.data);

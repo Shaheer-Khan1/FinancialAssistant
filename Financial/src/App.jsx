@@ -1,9 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import LoginRegister from '../Pages/LoginRegister/LoginRegister'; // Correct import path
+import LoginRegister from '../Pages/LoginRegister/LoginRegister'; 
 import Dashboard from '../Pages/Dashboard/Dashboard';
 import Income from '../Pages/Income/Income';
-import './App.css'; // Import custom CSS
+import './App.css'; 
 import CryptoDashboard from '../Pages/CryptoDashboard/CryptoDashboard';
 import ZakatCalculator from '../Pages/ZakatCalc/ZakatCalculator';
 import Expense from '../Pages/Expenses/Expenses';

@@ -3,7 +3,6 @@ import axios from 'axios';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import './IncomeCharts.css';
 
-// Register Chart.js components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const SavingCharts = () => {
@@ -13,7 +12,7 @@ const SavingCharts = () => {
     const userData = JSON.parse(localStorage.getItem('userData'));
     if (userData && userData.email) {
       axios
-        .get(`http://localhost:5000/api/auth/savings/${userData.email}`)  // Adjusted to use the email parameter in URL
+        .get(`http://localhost:5000/api/auth/savings/${userData.email}`)  
         .then((response) => {
           if (response.data && response.data.savings) {
             const savings = response.data.savings;
@@ -21,37 +20,33 @@ const SavingCharts = () => {
             const months = [];
             const savingAmounts = [];
 
-            // Prepare the data for the last 6 months
             for (let i = 5; i >= 0; i--) {
               const monthDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - i, 1);
               months.push(monthDate.toLocaleString('default', { month: 'short', year: 'numeric' }));
-              savingAmounts.push(0); // Initialize saving amount for each month
+              savingAmounts.push(0); 
             }
 
-            // Sum the savings for each of the last 6 months
             savings.forEach((saving) => {
               const savingDate = new Date(saving.date);
               const monthIndex = currentDate.getMonth() - savingDate.getMonth();
               if (monthIndex >= 0 && monthIndex <= 5) {
-                savingAmounts[5 - monthIndex] += saving.amount; // Accumulate savings for the corresponding month
+                savingAmounts[5 - monthIndex] += saving.amount; 
               }
             });
 
-            // Prepare chart data directly
             const chartData = {
               labels: months,
               datasets: [
                 {
                   label: 'Savings ($)',
                   data: savingAmounts,
-                  backgroundColor: 'rgba(0, 255, 0, 0.2)',  // Green bar color for savings
-                  borderColor: 'rgba(0, 255, 0, 1)',  // Green border for bars
-                  borderWidth: 2,  // Bold border
+                  backgroundColor: 'rgba(0, 255, 0, 0.2)', 
+                  borderColor: 'rgba(0, 255, 0, 1)', 
+                  borderWidth: 2,  
                 },
               ],
             };
 
-            // Render the chart (avoid state to prevent re-renders)
             if (chartContainerRef.current) {
               new ChartJS(chartContainerRef.current, {
                 type: 'bar',
@@ -64,27 +59,27 @@ const SavingCharts = () => {
                       beginAtZero: true,
                       ticks: {
                         font: {
-                          weight: 'bold', // Make Y-axis labels bold
-                          size: 12, // Adjust font size
-                          color: 'white', // Make Y-axis labels white
+                          weight: 'bold', 
+                          size: 12, 
+                          color: 'white', 
                         },
                       },
                       grid: {
-                        color: 'white', // Set grid lines to white
-                        lineWidth: 1, // Set grid line thickness
+                        color: 'white', 
+                        lineWidth: 1, 
                       },
                     },
                     x: {
                       ticks: {
                         font: {
-                          weight: 'bold', // Make X-axis labels bold
-                          size: 12, // Adjust font size
-                          color: 'white', // Make X-axis labels white
+                          weight: 'bold',
+                          size: 12, 
+                          color: 'white',
                         },
                       },
                       grid: {
-                        color: 'white', // Set grid lines to white
-                        lineWidth: 1, // Set grid line thickness
+                        color: 'white', 
+                        lineWidth: 1,
                       },
                     },
                   },
@@ -92,8 +87,8 @@ const SavingCharts = () => {
                     legend: {
                       labels: {
                         font: {
-                          weight: 'bold', // Make legend text bold
-                          color: 'white', // Make legend labels white
+                          weight: 'bold', 
+                          color: 'white', 
                         },
                       },
                     },
@@ -118,7 +113,6 @@ const SavingCharts = () => {
     <div className="income-charts-container">
       <h3 style={{ color: 'white' }}>Savings Data (Last 6 Months)</h3>
       <div>
-        {/* Chart will be rendered directly into this container */}
         <canvas ref={chartContainerRef}></canvas>
       </div>
     </div>

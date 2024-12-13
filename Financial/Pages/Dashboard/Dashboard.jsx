@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './Dashboard.css'; // Add custom styles here
+import './Dashboard.css'; 
 import IncomeCharts from '../../Components/IncomeCharts';
 import Crypto from '../../Components/Crypto';
 import ExpenseChart from '../../Components/ExpenseChart';
@@ -10,12 +10,11 @@ import SavingChart from '../../Components/SavingChart';
 import ShowDebt from '../../Components/ShowDebt';
 
 export default function Dashboard() {
-  const [userData, setUserData] = useState(null); // Store user data
-  const [error, setError] = useState(''); // Store any errors
+  const [userData, setUserData] = useState(null); 
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Retrieve user data from localStorage
     const userDataFromStorage = localStorage.getItem('userData');
     console.log(userDataFromStorage); // Log for debugging
     if (userDataFromStorage) {
@@ -35,7 +34,6 @@ export default function Dashboard() {
 
   return (
     <div className="dashboard-container">
-      {/* Navbar */}
       <nav className="navbar">
         <ul>
           <li><a href="#hero-section">Home</a></li>
@@ -50,9 +48,8 @@ export default function Dashboard() {
         </ul>
       </nav>
 
-      {/* Hero Section */}
       <section id="hero-section" className="hero-section">
-        <div className="circle"></div> {/* The revolving circle */}
+        <div className="circle"></div> 
         <div className="hero-content">
           <h1 className="hero-title">
             Your Financial Assistant
@@ -68,9 +65,7 @@ export default function Dashboard() {
       {/* Overview Section */}
       <section id="overview" className="overview">
         <h2>Hello, {userData.email}</h2>
-        <h2>Your Savings</h2>
         <p>
-          Congratulations! You currently have <strong>${userData.savings}</strong> in savings.<br/><br/>
           This is a great step toward achieving your financial goals. Whether you're saving for a rainy day, a big purchase, or long-term security, your progress shows that you're making smart financial decisions. 
           Keep up the excellent work, and continue building towards a secure and prosperous future. Remember, every dollar saved brings you closer to your dreams.<br/><br/>
           Happy Saving!
@@ -105,7 +100,6 @@ export default function Dashboard() {
           A budget is a financial plan that helps you manage your money by outlining your income and expenses over a specific period. Setting a monthly budget allows you to track your spending and ensure you are living within your means.
           Monitoring your remaining budget is key to staying on track and achieving your financial goals.
         </p>
-        <HighestBudget />
         <BudgetRemaining />
         <button onClick={() => navigate('/budget')}>Set Budget</button>
       </section>
@@ -114,7 +108,7 @@ export default function Dashboard() {
       <section id="savings-section" className="savings-section">
         <h2>Savings</h2>
         <SavingChart />
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet, nulla et dictum interdum, nisi lorem egestas odio, vitae scelerisque enim ligula venenatis dolor.</p>
+        <p>Savings provide financial security and peace of mind, helping individuals prepare for emergencies and future goals.</p>
         <button onClick={() => navigate('/savings')}>Track Savings</button>
       </section>
 
@@ -122,14 +116,14 @@ export default function Dashboard() {
       <section id="crypto-section" className="crypto-section">
         <h2>Crypto Dashboard</h2>
         <Crypto />
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet, nulla et dictum interdum, nisi lorem egestas odio, vitae scelerisque enim ligula venenatis dolor.</p>
+        <p>Cryptocurrency is a digital or virtual form of money that uses cryptography for security, making it resistant to fraud and counterfeiting.</p>
         <button onClick={() => navigate('/crypto')}>Crypto Dashboard</button>
       </section>
 
       {/* Zakat Section */}
       <section id="zakat-section" className="zakat-section">
         <h2>Zakat Calculator</h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet, nulla et dictum interdum, nisi lorem egestas odio, vitae scelerisque enim ligula venenatis dolor.</p>
+        <p>Zakat holds immense importance in Islam as it serves as a means of purifying one's wealth and nurturing empathy towards the less fortunate.</p>
         <button onClick={() => navigate('/zakat')}>Zakat Calculator</button>
       </section>
 
@@ -137,7 +131,7 @@ export default function Dashboard() {
       <section id="debts-section" className="debts-section">
         <h2>Manage Debts</h2>
         <ShowDebt />
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet, nulla et dictum interdum, nisi lorem egestas odio, vitae scelerisque enim ligula venenatis dolor.</p>
+        <p>Effective debt management involves creating a structured plan to repay outstanding debts while minimizing financial strain.</p>
         <button onClick={() => navigate('/debts')}>Manage Debts</button>
       </section>
 

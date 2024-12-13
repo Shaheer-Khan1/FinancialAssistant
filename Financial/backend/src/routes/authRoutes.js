@@ -14,7 +14,7 @@ router.post('/register', async (req, res) => {
     // Extract and normalize the fields
     const { name, email, password } = req.body;
     
-    // Normalize email: trim and convert to lowercase for consistency
+    // Normalize email
     const normalizedEmail = email.trim().toLowerCase();
 
     try {
@@ -37,7 +37,6 @@ router.post('/register', async (req, res) => {
         // Return success response
         res.status(201).json({ message: 'User registered successfully', user: newUser });
     } catch (error) {
-        // Log and return detailed error message
         console.error('Error during user registration:', error);
         res.status(500).json({ message: 'Server error', error: error.message });
     }
@@ -63,12 +62,12 @@ router.post('/login', async (req, res) => {
 });
 
 router.get('/getUserData', async (req, res) => {
-    const { email } = req.query; // Assuming the email is sent as a query parameter
+    const { email } = req.query; 
     try {
       const user = await User.findOne({ email });
       if (!user) return res.status(404).json({ message: 'User not found' });
   
-      // Respond with the complete user data (except password for security)
+      
       const { password, ...userData } = user.toObject();
       res.status(200).json(userData);
     } catch (error) {
@@ -84,7 +83,7 @@ router.get('/getUserData', async (req, res) => {
       const user = await User.findOne({ email });
       if (!user) return res.status(404).json({ message: 'User not found' });
   
-      const incomes = user.income; // Retrieve all incomes for this user
+      const incomes = user.income; 
       res.status(200).json({ incomes });
     } catch (error) {
       console.error('Error fetching incomes:', error);
@@ -230,7 +229,6 @@ router.delete('/incomes', async (req, res) => {
       // Access the cryptoBalance field of the user
       const holdings = user.cryptoBalance;
   
-      // Return the user's crypto holdings
       res.json({ holdings });
     } catch (error) {
       console.error('Error fetching holdings:', error);
@@ -260,7 +258,7 @@ router.delete('/incomes', async (req, res) => {
     }
   });
   router.get('/expenses', async (req, res) => {
-    const { email } = req.query; // Get email from query parameters
+    const { email } = req.query; 
   
     if (!email) {
       return res.status(400).json({ message: 'Email is required.' });
@@ -292,7 +290,7 @@ router.delete('/expenses', async (req, res) => {
       return res.status(404).json({ message: 'User not found.' });
     }
 
-    // Remove the expense that matches date, amount, and description
+    
     user.expenses = user.expenses.filter(expense =>
       !(expense.date === date && expense.amount === amount && expense.description === description)
     );
@@ -327,7 +325,6 @@ router.put('/expenses', async (req, res) => {
       return res.status(404).json({ message: 'Expense not found.' });
     }
 
-    // Update the expense's date, amount, and description
     expense.date = newDate;
     expense.amount = newAmount;
     expense.description = newDescription;
@@ -347,19 +344,16 @@ router.put('/expenses', async (req, res) => {
     const { email, budget } = req.body;
   
     try {
-      // Find the user by email
       const user = await User.findOne({ email });
   
       if (!user) {
         return res.status(404).json({ message: 'User not found' });
       }
   
-      // Update the user's budget and budgetDate
       user.budget.amount = budget.amount;
       user.budget.duration = budget.duration;
-      user.budgetDate = budget.date; // Save the date when the budget was set
+      user.budgetDate = budget.date; 
   
-      // Save the user with the updated budget and budgetDate
       await user.save();
       res.status(200).json({ message: 'Budget saved successfully', user });
     } catch (error) {
@@ -371,24 +365,22 @@ router.put('/expenses', async (req, res) => {
 
   router.get('/highest-budget', async (req, res) => {
     try {
-      // Aggregation pipeline to group by duration and get the highest budget
       const result = await User.aggregate([
         {
           $group: {
-            _id: "$budget.duration",  // Group by duration
-            highestBudget: { $max: "$budget.amount" }  // Get the highest budget for each duration
+            _id: "$budget.duration",  
+            highestBudget: { $max: "$budget.amount" }
           }
         },
         {
           $project: {
-            _id: 0,  // Hide the internal '_id' field
-            duration: "$_id",  // Rename '_id' to 'duration'
-            highestBudget: 1  // Include the highest budget field
+            _id: 0,  
+            duration: "$_id",  
+            highestBudget: 1  
           }
         }
       ]);
   
-      // Send the result back as a response
       res.status(200).json(result);
     } catch (error) {
       console.error('Error fetching highest budget:', error);
@@ -396,13 +388,13 @@ router.put('/expenses', async (req, res) => {
     }
   });
 
-  // Backend route to delete the budget
+  // Backend to delete the budget
   router.delete('/budget', async (req, res) => {
   const { email } = req.body;
   console.log(req.body);
   try {
-    // Assuming you have a Budget model to interact with your database
-    await Budget.deleteOne({ email }); // Delete the user's existing budget
+   
+    await Budget.deleteOne({ email }); 
     res.status(200).send({ message: 'Previous budget deleted successfully' });
   } catch (error) {
     res.status(500).send({ message: 'Error deleting budget' });
@@ -422,22 +414,19 @@ router.put('/expenses', async (req, res) => {
         return res.status(404).json({ message: 'User not found.' });
       }
   
-      // Get the date when the budget was added
       const budgetDate = user.budgetDate;
   
       if (!budgetDate) {
         return res.status(400).json({ message: 'Budget date not found for the user.' });
       }
   
-      // Calculate the total expenses since the budget date
       const totalExpenses = user.expenses.reduce((total, expense) => {
         if (new Date(expense.date) >= new Date(budgetDate)) {
-          return total + expense.amount;  // Only sum the expenses after the budget was added
+          return total + expense.amount;  
         }
         return total;
       }, 0);
   
-      // Calculate the remaining budget
       const remainingBudget = user.budget.amount - totalExpenses;
   
       res.status(200).json({
@@ -452,12 +441,10 @@ router.put('/expenses', async (req, res) => {
   });
   
 
-  // POST route to save user savings
 router.post('/savings', async (req, res) => {
-  console.log('Received data:', req.body); // Debugging purpose
+  console.log('Received data:', req.body); 
   const { email, amount, description, date } = req.body;
 
-  // Validate request body
   if (!email || !amount || !description) {
     return res.status(400).json({ message: 'Please provide email, amount, and description' });
   }
@@ -467,18 +454,16 @@ router.post('/savings', async (req, res) => {
   }
 
   try {
-    // Find the user by email
     const user = await User.findOne({ email });
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    // Push the new savings entry into the savings array
     user.savings.push({
       amount,
       description,
-      date: date ? new Date(date) : new Date(), // Use the provided date or the current date
+      date: date ? new Date(date) : new Date(), 
     });
 
     await user.save();
@@ -490,7 +475,6 @@ router.post('/savings', async (req, res) => {
   }
 });
 
-// Update savings entry based on email, amount, and description
 router.put('/savings', async (req, res) => {
   const { email, oldAmount, oldDescription, oldDate, amount, description, date } = req.body;
 
@@ -503,28 +487,25 @@ router.put('/savings', async (req, res) => {
   }
 
   try {
-    // Find the user by email
     const user = await User.findOne({ email });
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    // Find the savings entry to update using old values (oldAmount, oldDescription, oldDate)
     const saving = user.savings.find(s => 
       s.amount === oldAmount &&
       s.description === oldDescription &&
-      new Date(s.date).toLocaleDateString() === new Date(oldDate).toLocaleDateString() // Match old date as well
+      new Date(s.date).toLocaleDateString() === new Date(oldDate).toLocaleDateString() 
     );
 
     if (!saving) {
       return res.status(404).json({ message: 'Matching savings entry not found' });
     }
 
-    // Update the found entry with the new values
     saving.amount = amount;
     saving.description = description;
-    saving.date = date ? new Date(date) : new Date(); // Use the provided date or the current date
+    saving.date = date ? new Date(date) : new Date(); 
 
     await user.save();
 
@@ -545,21 +526,18 @@ router.delete('/savings', async (req, res) => {
   }
 
   try {
-    // Find the user by email
     const user = await User.findOne({ email });
 
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    // Find the index of the savings entry to delete
     const index = user.savings.findIndex(s => s.amount === amount && s.description === description);
 
     if (index === -1) {
       return res.status(404).json({ message: 'Matching savings entry not found' });
     }
 
-    // Remove the savings entry from the array
     user.savings.splice(index, 1);
 
     await user.save();
@@ -575,7 +553,7 @@ router.delete('/savings', async (req, res) => {
 
 // GET route to retrieve user savings
 router.get('/savings/:email', async (req, res) => {
-  console.log(req.params); // Logs the request parameters (email)
+  console.log(req.params); 
   const { email } = req.params;
 
   if (!email) {
@@ -589,7 +567,6 @@ router.get('/savings/:email', async (req, res) => {
       return res.status(404).json({ message: 'No savings found for this user' });
     }
 
-    // Log the savings data before sending it back
     console.log('User Savings:', user.savings);
 
     res.status(200).json({ savings: user.savings });
@@ -635,7 +612,7 @@ router.post('/debts', async (req, res) => {
 
 // POST route to get debts for a user
 router.post('/showdebts', async (req, res) => {
-  const { email } = req.body; // Email will now come from the body
+  const { email } = req.body; 
 
   try {
     const user = await User.findOne({ email });
@@ -651,10 +628,9 @@ router.post('/showdebts', async (req, res) => {
 });
 
 router.delete('/debts', async (req, res) => {
-  const { description, amount, date, type } = req.body;  // Receive debt details from frontend
+  const { description, amount, date, type } = req.body;  
 
   try {
-    // Find the user by email and remove the debt by matching description, amount, date, and type
     const user = await User.findOneAndUpdate(
       { 'debts.description': description, 'debts.amount': amount, 'debts.date': date, 'debts.type': type },
       { $pull: { debts: { description, amount, date, type } } },

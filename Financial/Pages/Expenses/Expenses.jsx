@@ -4,7 +4,7 @@ import '../Expenses/Expenses.css';
 
 export default function Expense() {
   const [expense, setExpense] = useState({ date: '', amount: '', description: '' });
-  const [expenses, setExpenses] = useState([]); // State to hold the list of expenses
+  const [expenses, setExpenses] = useState([]); 
   const [error, setError] = useState('');
   const [editingExpense, setEditingExpense] = useState(null); // New state to track the expense being edited
 

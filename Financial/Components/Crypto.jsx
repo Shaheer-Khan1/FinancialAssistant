@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 
-// Register chart.js components
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function Crypto() {
@@ -11,7 +10,6 @@ export default function Crypto() {
   const [coinPrices, setCoinPrices] = useState({});
   const chartRef = useRef(null);
 
-  // Fetch the user's crypto holdings
   useEffect(() => {
     const email = JSON.parse(localStorage.getItem('userData'))?.email;
     if (!email) {
@@ -19,7 +17,6 @@ export default function Crypto() {
       return;
     }
 
-    // Fetch the user's holdings using the email
     axios
       .post('http://localhost:5000/api/auth/crypto/holdings', { email })
       .then((response) => {
@@ -88,10 +85,9 @@ export default function Crypto() {
 
       const ctx = chartRef.current.getContext('2d');
       if (ctx.chart) {
-        ctx.chart.destroy(); // Destroy the existing chart if present
+        ctx.chart.destroy(); 
       }
 
-      // Create a new Pie chart
       new ChartJS(ctx, {
         type: 'pie',
         data: chartData,
@@ -116,10 +112,8 @@ export default function Crypto() {
     <div>
       <h3>Crypto Portfolio</h3>
 
-      {/* Error message if any */}
       {error && <div style={{ color: 'red' }}>{error}</div>}
 
-      {/* User Holdings */}
       <div>
         <h3>Your Holdings</h3>
         {userHoldings.length > 0 ? (
@@ -140,7 +134,6 @@ export default function Crypto() {
         )}
       </div>
 
-      {/* Render Pie Chart */}
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '20px' }}>
         <h3>Your Portfolio Breakdown</h3>
         <canvas ref={chartRef} id="chart-container" width="200" height="200"></canvas>

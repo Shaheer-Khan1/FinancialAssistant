@@ -5,11 +5,10 @@ export default function HighestBudget() {
   const [highestBudgets, setHighestBudgets] = useState([]);
 
   useEffect(() => {
-    // Fetch the highest budgets for each duration
     const fetchHighestBudgets = async () => {
       try {
         const response = await axios.get('http://localhost:5000/api/auth/highest-budget');
-        setHighestBudgets(response.data);  // Set the data to state
+        setHighestBudgets(response.data);  
       } catch (error) {
         console.error('Error fetching highest budgets:', error);
       }

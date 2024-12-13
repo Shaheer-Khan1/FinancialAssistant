@@ -3,7 +3,6 @@ import axios from 'axios';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import './IncomeCharts.css';
 
-// Register Chart.js components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const IncomeCharts = () => {
@@ -23,37 +22,33 @@ const IncomeCharts = () => {
             const months = [];
             const incomeAmounts = [];
 
-            // Prepare the data for the last 6 months
             for (let i = 5; i >= 0; i--) {
               const monthDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - i, 1);
               months.push(monthDate.toLocaleString('default', { month: 'short', year: 'numeric' }));
-              incomeAmounts.push(0); // Initialize income amount for each month
+              incomeAmounts.push(0); 
             }
 
-            // Sum the income for each of the last 6 months
             incomes.forEach((income) => {
               const incomeDate = new Date(income.date);
               const monthIndex = currentDate.getMonth() - incomeDate.getMonth();
               if (monthIndex >= 0 && monthIndex <= 5) {
-                incomeAmounts[5 - monthIndex] += income.amount; // Accumulate income for the corresponding month
+                incomeAmounts[5 - monthIndex] += income.amount;
               }
             });
 
-            // Prepare chart data directly
             const chartData = {
               labels: months,
               datasets: [
                 {
                   label: 'Income ($)',
                   data: incomeAmounts,
-                  backgroundColor: 'rgba(255, 0, 0, 0.2)',  // Red bar color
-                  borderColor: 'rgba(255, 0, 0, 1)',  // Red border for bars
-                  borderWidth: 2,  // Bold border
+                  backgroundColor: 'rgba(255, 0, 0, 0.2)',  
+                  borderColor: 'rgba(255, 0, 0, 1)',  
+                  borderWidth: 2,  
                 },
               ],
             };
 
-            // Render the chart (avoid state to prevent re-renders)
             if (chartContainerRef.current) {
               new ChartJS(chartContainerRef.current, {
                 type: 'bar',
@@ -66,27 +61,27 @@ const IncomeCharts = () => {
                       beginAtZero: true,
                       ticks: {
                         font: {
-                          weight: 'bold', // Make Y-axis labels bold
-                          size: 12, // Adjust font size
-                          color: 'white', // Make Y-axis labels white
+                          weight: 'bold', 
+                          size: 12, 
+                          color: 'white', 
                         },
                       },
                       grid: {
-                        color: 'white', // Set grid lines to white
-                        lineWidth: 1, // Set grid line thickness
+                        color: 'white', 
+                        lineWidth: 1, 
                       },
                     },
                     x: {
                       ticks: {
                         font: {
-                          weight: 'bold', // Make X-axis labels bold
-                          size: 12, // Adjust font size
-                          color: 'white', // Make X-axis labels white
+                          weight: 'bold', 
+                          size: 12, 
+                          color: 'white', 
                         },
                       },
                       grid: {
-                        color: 'white', // Set grid lines to white
-                        lineWidth: 1, // Set grid line thickness
+                        color: 'white', 
+                        lineWidth: 1,
                       },
                     },
                   },
@@ -94,8 +89,8 @@ const IncomeCharts = () => {
                     legend: {
                       labels: {
                         font: {
-                          weight: 'bold', // Make legend text bold
-                          color: 'white', // Make legend labels white
+                          weight: 'bold', 
+                          color: 'white', 
                         },
                       },
                     },
@@ -120,7 +115,6 @@ const IncomeCharts = () => {
     <div className="income-charts-container">
       <h3 style={{ color: 'white' }}>Income Data (Last 6 Months)</h3>
       <div>
-        {/* Chart will be rendered directly into this container */}
         <canvas ref={chartContainerRef}></canvas>
       </div>
     </div>

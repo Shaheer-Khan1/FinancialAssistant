@@ -6,11 +6,11 @@ export default function Savings() {
   const [savingsAmount, setSavingsAmount] = useState('');
   const [description, setDescription] = useState('');
   const [date, setDate] = useState('');
-  const [savingsList, setSavingsList] = useState([]); // Initialize as empty array
+  const [savingsList, setSavingsList] = useState([]); 
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
-  const [isEditing, setIsEditing] = useState(false); // To check if the form is for updating
-  const [editingSaving, setEditingSaving] = useState(null); // Store the saving being edited
+  const [isEditing, setIsEditing] = useState(false); 
+  const [editingSaving, setEditingSaving] = useState(null); 
 
   const email = JSON.parse(localStorage.getItem('userData'))?.email;
 
@@ -49,12 +49,11 @@ export default function Savings() {
 
     try {
       if (isEditing && editingSaving) {
-        // If editing, update the saving
         const updatedSavingData = {
           email,
-          oldAmount: editingSaving.amount, // old amount
-          oldDescription: editingSaving.description, // old description
-          oldDate: editingSaving.date, // old date
+          oldAmount: editingSaving.amount,
+          oldDescription: editingSaving.description, 
+          oldDate: editingSaving.date, 
           amount: Number(savingsAmount),
           description,
           date,
@@ -63,12 +62,10 @@ export default function Savings() {
         await axios.put('http://localhost:5000/api/auth/savings', updatedSavingData);
         setSuccessMessage('Savings updated successfully!');
       } else {
-        // If not editing, create new saving
         const response = await axios.post('http://localhost:5000/api/auth/savings', savingsData);
         setSuccessMessage('Savings successfully recorded!');
       }
 
-      // Reset form fields
       setSavingsAmount('');
       setDescription('');
       setDate('');
@@ -76,7 +73,6 @@ export default function Savings() {
       setIsEditing(false);
       setEditingSaving(null);
 
-      // Fetch the updated savings list
       const updatedSavings = await axios.get(`http://localhost:5000/api/auth/savings/${email}`);
       setSavingsList(updatedSavings.data.savings || []);
     } catch (err) {
@@ -90,7 +86,7 @@ export default function Savings() {
     setDescription(saving.description);
     setDate(saving.date);
     setIsEditing(true);
-    setEditingSaving(saving); // Store the saving being edited
+    setEditingSaving(saving); 
   };
 
   const handleDelete = async (saving) => {
@@ -104,7 +100,6 @@ export default function Savings() {
       await axios.delete('http://localhost:5000/api/auth/savings', { data: deleteData });
       setSuccessMessage('Savings deleted successfully!');
       
-      // Fetch the updated savings list
       const updatedSavings = await axios.get(`http://localhost:5000/api/auth/savings/${email}`);
       setSavingsList(updatedSavings.data.savings || []);
     } catch (err) {

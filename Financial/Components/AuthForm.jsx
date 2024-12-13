@@ -21,7 +21,6 @@ const AuthForm = ({ isSignup, onSubmit }) => {
   const navigate = useNavigate(); 
 
   useEffect(() => {
-    // Clear user data when entering the signup form
     if (isSignup) {
       localStorage.removeItem('userData'); 
       setFormData({ name: '', email: '', password: '' });
@@ -49,9 +48,8 @@ const AuthForm = ({ isSignup, onSubmit }) => {
       if (isSignup) {
         setSuccessMessage('Registration successful!');
       } else if (response.data.token) {
-        // Only store userData during login
         localStorage.setItem('token', response.data.token);
-        localStorage.setItem('userData', JSON.stringify({ email: formData.email })); // Store only email or necessary data
+        localStorage.setItem('userData', JSON.stringify({ email: formData.email })); 
         setSuccessMessage('Login successful!');
         navigate('/dashboard');
       }

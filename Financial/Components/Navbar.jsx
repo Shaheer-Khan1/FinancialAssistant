@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { Link } from 'react-scroll'; // Import from 'react-scroll' for smooth scrolling
+import { Link } from 'react-scroll'; 
 import './Navbar.css';
 
 const Navbar = () => {
-  // State to manage whether the menu is open or closed
   const [isOpen, setIsOpen] = useState(false);
 
   // Toggle the menu open/close
@@ -15,14 +14,12 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="logo">Logo</div>
 
-      {/* Hamburger Icon */}
       <div className="hamburger" onClick={toggleMenu}>
         <div className={`line ${isOpen ? 'open' : ''}`}></div>
         <div className={`line ${isOpen ? 'open' : ''}`}></div>
         <div className={`line ${isOpen ? 'open' : ''}`}></div>
       </div>
 
-      {/* Navigation Links */}
       <ul className={`nav-links ${isOpen ? 'open' : ''}`}>
         <li><Link to="hero-section" smooth={true} duration={500}>Home</Link></li>
         <li><Link to="income-section" smooth={true} duration={500}>Income</Link></li>

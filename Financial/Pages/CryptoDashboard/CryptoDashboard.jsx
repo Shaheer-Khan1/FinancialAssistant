@@ -45,7 +45,7 @@ export default function CryptoDashboard() {
       return;
     }
 
-    const userEmail = JSON.parse(localStorage.getItem('userData'))?.email;  // Retrieve email from localStorage
+    const userEmail = JSON.parse(localStorage.getItem('userData'))?.email;  
 
     if (!userEmail) {
       setError('User is not logged in.');
@@ -53,7 +53,7 @@ export default function CryptoDashboard() {
     }
 
     const data = {
-      email: userEmail,  // Include email in the data
+      email: userEmail, 
       coinName: selectedCoin,
       amount: parseFloat(amount),
     };
@@ -77,7 +77,6 @@ export default function CryptoDashboard() {
     <div className="crypto-form-container">
       <h1>Submit Cryptocurrency Data</h1>
       
-      {/* Display any error or success message */}
       {error && <div style={{ color: 'red' }}>{error}</div>}
       {successMessage && <div style={{ color: 'green' }}>{successMessage}</div>}
 

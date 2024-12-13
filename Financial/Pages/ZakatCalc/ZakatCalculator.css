@@ -1,91 +1,75 @@
-.zakatcalculator {
+.zakat-calculator {
     max-width: 600px;
-    margin: 50px auto;
-    padding: 30px;
-    background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    border: 1px solid #d1d1d1;
-    font-family: 'Arial', sans-serif;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    font-family: Arial, sans-serif;
+  }
+  
+  .zakat-calculator h1 {
+    font-size: 24px;
     color: #333;
-}
-
-.zakatcalculator h1 {
     text-align: center;
-    font-size: 22px;
-    color: #2c3e50;
+    margin-bottom: 10px;
+  }
+  
+  .zakat-calculator p {
+    font-size: 14px;
+    color: #666;
+    text-align: center;
     margin-bottom: 20px;
-}
-
-.zakatcalculator form {
+  }
+  
+  .zakat-calculator form {
     display: flex;
     flex-direction: column;
     gap: 15px;
-}
-
-.zakatcalculator label {
+  }
+  
+  .zakat-calculator label {
     font-size: 14px;
-    font-weight: bold;
     color: #555;
     margin-bottom: 5px;
-}
-
-.zakatcalculator input {
+    display: block;
+  }
+  
+  .zakat-calculator input {
     width: 100%;
-    padding: 10px;
-    font-size: 14px;
+    padding: 8px;
     border: 1px solid #ccc;
-    border-radius: 5px;
-    transition: border-color 0.2s;
-}
-
-.zakatcalculator input:focus {
-    border-color: #007bff;
-    outline: none;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
-}
-
-.zakatcalculator button {
-    background-color: #007bff;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  
+  .zakat-calculator button {
+    padding: 10px 15px;
+    font-size: 14px;
     color: #fff;
-    font-size: 16px;
-    padding: 12px;
+    background-color: #007bff;
     border: none;
-    border-radius: 5px;
+    border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s;
-}
-
-.zakatcalculator button:hover {
+  }
+  
+  .zakat-calculator button:hover {
     background-color: #0056b3;
-}
-
-.zakat-result-container {
+  }
+  
+  .zakat-result {
     margin-top: 20px;
     text-align: center;
-}
-
-.zakat-result-container h2 {
-    font-size: 18px;
-    color: #2e8b57;
-}
-
-.zakat-result-container p {
+  }
+  
+  .zakat-result h2 {
+    font-size: 20px;
+    color: #333;
+  }
+  
+  .zakat-result p {
     font-size: 14px;
     color: #555;
-}
-
-/* Form Sections */
-.form-1, 
-.silver-container {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-/* Read-only inputs */
-.zakatcalculator input[readonly] {
-    background-color: #f9f9f9;
-    cursor: not-allowed;
-    color: #888;
-}
+  }
+  

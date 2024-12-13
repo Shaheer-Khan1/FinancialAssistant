@@ -11,7 +11,7 @@ export default function Debts() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const userEmail = JSON.parse(localStorage.getItem('userData'))?.email; // Retrieve user email from localStorage
+    const userEmail = JSON.parse(localStorage.getItem('userData'))?.email; 
 
     if (!userEmail) {
       setMessage('User is not logged in.');
